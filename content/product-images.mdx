@@ -1,0 +1,89 @@
+---
+title: "Product images"
+description: "How to manage product images and alt text in BigCommerce to control PDP gallery behavior"
+---
+
+## Where to edit product images
+
+1. Go to [BigCommerce Admin > Products](https://store-t5arr0qby1.mybigcommerce.com/manage/products)
+2. Click on the product you want to edit
+3. Scroll to the **Images & Videos** section
+
+Here you can upload, reorder, and edit product images.
+
+## Why alt text matters
+
+Alt text on product images does more than accessibility and SEO — it directly controls which image appears in the PDP gallery when customers arrive via a link with a query parameter.
+
+### How `?finish=` and `?color=` links work
+
+When a product URL includes `?finish=Natural` or `?color=Slate`, the storefront:
+
+1. Reads the query parameter value
+2. Normalizes it (lowercase, strips hyphens/underscores/spaces)
+3. Searches through the product's image alt text for a match
+4. Scrolls the gallery to the matching image
+
+**Example:**
+
+| URL | Matches alt text | Gallery shows |
+|-----|-----------------|---------------|
+| `/product/?finish=Natural` | `Natural` | The image with alt text "Natural" |
+| `/product/?finish=Light-Gray` | `Light Gray` or `LightGray` | The image with alt text "Light Gray" |
+| `/product/?color=Slate` | `Slate` | The image with alt text "Slate" |
+
+<Warning>
+  If no image alt text matches the query parameter, the gallery defaults to the first image. Always ensure alt text is set correctly for finish/color variant images.
+</Warning>
+
+## Setting alt text
+
+For each product image in BigCommerce admin:
+
+1. Click the image or its edit icon
+2. Find the **Alt Text** field (also labeled "Image description")
+3. Enter descriptive alt text
+
+### Alt text guidelines
+
+| Image type | Recommended alt text | Example |
+|-----------|---------------------|---------|
+| **Finish/color variant** | The exact finish or color name | `Natural` |
+| **Main product shot** | Product name | `Rust-Oleum HOME Floor Coating Kit` |
+| **Lifestyle photo** | Descriptive scene | `Kitchen with natural finish floor coating` |
+| **Detail/texture** | Material description | `Natural finish close-up texture` |
+
+## Image order
+
+The first image in the list is the **default hero image** shown when no query parameter is present. Drag images to reorder them in BigCommerce admin.
+
+Recommended order:
+1. Main product hero image (white/clean background)
+2. Finish/color variant images (one per variant)
+3. Lifestyle/in-use photos
+4. Detail and texture shots
+5. Kit contents/packaging
+
+## Image specifications
+
+| Property | Recommendation |
+|----------|---------------|
+| **Minimum resolution** | 1200 x 1200px |
+| **Format** | JPEG for photos, PNG for graphics |
+| **Background** | White or transparent for product shots |
+| **Aspect ratio** | Square (1:1) preferred for consistency |
+| **Max file size** | 8MB (BigCommerce limit) |
+
+BigCommerce automatically generates multiple sizes for responsive display. Upload the highest quality source image available.
+
+## Variant image assignment
+
+Product variants (options like color or finish) can have their own assigned images. When a customer selects a variant, the gallery automatically scrolls to that variant's image.
+
+To assign a variant image:
+
+1. In the product editor, go to the **Variants** section
+2. Click on a specific variant
+3. Upload or select an image for that variant
+
+See [Product options](/content/product-options) for more on managing variants.

@@ -1,0 +1,99 @@
+---
+title: "Flooring kits"
+description: "Specific guidance for managing flooring kit product content and PDPs"
+---
+
+## How flooring kits work
+
+Flooring kits use the **same product and image system** as all other Rust-Oleum HOME products. There is no flooring-kit-specific code in the storefront — the PDP template, gallery, and options work identically for all product types.
+
+What makes flooring kits unique is how they are **configured** in BigCommerce, not how the code handles them.
+
+## Setting up a flooring kit PDP
+
+### 1. Product images
+
+Upload all finish variant images to the product's main image gallery. Each image should have alt text matching the finish name exactly:
+
+| Image | Alt text |
+|-------|----------|
+| Natural finish swatch | `Natural` |
+| Slate finish swatch | `Slate` |
+| White finish swatch | `White` |
+| Kit contents photo | `Rust-Oleum HOME Floor Coating Kit` |
+| Application photo | `Floor coating application in kitchen` |
+
+This allows `?finish=Natural` links to show the correct image.
+
+### 2. Product options
+
+Create a **Finish** option with values matching the alt text:
+
+- Natural
+- Slate
+- White
+
+Assign each variant's image so the gallery updates when customers select a finish.
+
+### 3. Product description
+
+Use metafields for structured PDP content:
+- **Kit Includes** — List of items in the kit
+- **Coverage** — Square footage coverage
+- **Preparation steps** — Surface prep instructions
+
+These appear in the ProductAccordions component on the PDP.
+
+## PDF Instructions widget
+
+The **PDFInstructionsBlock** widget is commonly placed on flooring kit PDPs to provide downloadable instruction PDFs.
+
+### Setting it up in Page Builder
+
+1. Navigate to the product page in Page Builder
+2. Find the PDF Instructions widget in the Rustoleum Home category
+3. Drag it into a widget zone on the product page
+4. Configure the PDF links:
+
+| Field | Example |
+|-------|---------|
+| **PDF Title** | `Floor Coating Kit Instructions` |
+| **PDF URL** | Link to the hosted PDF file |
+| **PDF Description** | `Step-by-step application guide` |
+
+## Category assignment
+
+Flooring kits should be assigned to categories that include "Floor" in the name. This triggers:
+
+- **Breadcrumb generation** — The PDP shows "Shop All > Floor > [Product Name]"
+- **HowItWorks widget** — When placed on the PDP, the HowItWorks widget automatically selects the "Floor" tab based on the product's category
+- **ProcessSection widget** — Same category-based tab selection
+
+## Linking to flooring kits
+
+Use the `?finish=` parameter to link directly to a specific finish:
+
+```
+/floor-coating-kit/?finish=Natural
+/floor-coating-kit/?finish=Slate
+```
+
+This is commonly used in:
+- Homepage hero carousel CTAs
+- Gallery page product links
+- Marketing email links
+- Social media ads
+
+<Warning>
+  The `?finish=` value must exactly match an image's alt text after normalization (lowercase, no hyphens/spaces). "Natural" matches "natural", "NATURAL", and "Natural". But "Nat" would not match "Natural".
+</Warning>
+
+## Troubleshooting flooring kit PDPs
+
+| Issue | Likely cause | Fix |
+|-------|-------------|-----|
+| Wrong finish image shows | Alt text does not match `?finish=` value | Edit image alt text in BC admin |
+| No images appear | Product has no images uploaded | Upload images in Products > Images & Videos |
+| HowItWorks shows wrong tab | Product not in a "Floor" category | Check product category assignments |
+| PDF Instructions not showing | Widget not placed on the page | Add PDFInstructionsBlock via Page Builder |
+| Gallery shows generic alt text | Variant image not in main gallery | Add variant image to both the variant AND the main image gallery |

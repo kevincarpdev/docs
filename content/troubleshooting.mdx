@@ -1,0 +1,117 @@
+---
+title: "Troubleshooting"
+description: "Common issues and solutions for content entry in Page Builder"
+---
+
+## Widget issues
+
+### Widget not appearing after save
+
+**Symptom:** You saved changes in Page Builder but the widget is not visible on the live site.
+
+**Solutions:**
+1. Make sure you clicked **Publish**, not just **Save**. Save only creates a draft.
+2. Clear your browser cache or open the site in an incognito window.
+3. Check that the widget is placed in a visible drop zone, not hidden behind another element.
+
+### Widget shows but content is wrong
+
+**Symptom:** The widget appears but shows old or default content.
+
+**Solutions:**
+1. Verify you are editing the correct page in the Page Builder dropdown.
+2. Check that you saved AND published after making changes.
+3. Hard refresh the live site (`Cmd+Shift+R` on Mac, `Ctrl+Shift+R` on Windows).
+
+### Widget shows "preview" content on the live site
+
+**Symptom:** The widget shows placeholder or preview-only content instead of the configured content.
+
+**Solution:** This typically means the React component failed to hydrate. Check the browser console (F12 > Console) for JavaScript errors. Report the error to the development team.
+
+### Widget not available in the catalog
+
+**Symptom:** You cannot find a specific widget in the Page Builder widget picker.
+
+**Solutions:**
+1. The widget may not have been published yet. Contact the development team.
+2. Check that you are looking in the **Rustoleum Home** category.
+3. Some widgets are page-specific and may only appear in certain drop zones.
+
+## Image issues
+
+### Product gallery shows wrong image
+
+**Symptom:** The PDP opens showing the wrong image, especially when accessed via a `?finish=` link.
+
+**Solution:** Edit the product's image alt text in BigCommerce admin. The alt text must match the `?finish=` parameter value (case-insensitive). See [Product images](/content/product-images).
+
+### Images not loading
+
+**Symptom:** Image areas show broken image icons or are blank.
+
+**Solutions:**
+1. Re-upload the image via BigCommerce Image Manager.
+2. Verify the image URL is accessible (open it directly in a browser).
+3. Check that the image format is supported (JPEG, PNG, GIF, WebP).
+4. Ensure the file is under BigCommerce's 8MB size limit.
+
+### Image looks blurry
+
+**Symptom:** The product image appears pixelated or low-resolution.
+
+**Solution:** Upload a higher resolution source image (minimum 1200x1200px for product images). BigCommerce generates responsive sizes from the source.
+
+## Page Builder issues
+
+### Page Builder is slow or unresponsive
+
+**Solutions:**
+1. Try a different browser (Chrome is recommended).
+2. Close other browser tabs to free memory.
+3. Clear your browser cache and cookies for the BigCommerce admin.
+4. Refresh the page.
+
+### Changes disappeared
+
+**Symptom:** Changes you made earlier are no longer visible.
+
+**Possible causes:**
+1. You did not click **Save** before navigating away.
+2. Another user may have published different changes (Page Builder does not have conflict resolution).
+3. You may be viewing a cached version of the page.
+
+### Cannot edit a widget
+
+**Symptom:** Clicking a widget does not open its settings.
+
+**Solutions:**
+1. Make sure you are in **Design** mode, not Preview mode.
+2. Try clicking directly on the widget content, not the surrounding area.
+3. Refresh Page Builder.
+
+## Product page issues
+
+### HowItWorks widget shows wrong category tab
+
+**Symptom:** The HowItWorks widget on a PDP defaults to the wrong tab (e.g., shows Countertop instead of Floor).
+
+**Solution:** Check the product's category assignments in BigCommerce admin. The widget reads the product's categories and selects the matching tab. Products must be assigned to a category containing "Floor", "Countertop", or "Cabinet" for correct tab selection.
+
+### Product reviews not showing
+
+**Symptom:** The SiteVibes review widget is not visible on the PDP.
+
+**Solutions:**
+1. Ensure the ProductReviewsBlock widget is placed on the page in Page Builder.
+2. Check that the product has reviews in SiteVibes.
+3. Clear browser cache — review widgets sometimes cache aggressively.
+
+## Getting help
+
+If you encounter an issue not covered here:
+
+1. Note the **page name** and **widget name** where the issue occurs
+2. Take a **screenshot** of the problem
+3. Check the **browser console** (F12 > Console) for error messages
+4. Contact the development team with these details

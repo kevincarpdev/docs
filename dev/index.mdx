@@ -1,0 +1,63 @@
+---
+title: "Developer getting started"
+description: "Tech stack overview, key repos, and important links for Rust-Oleum HOME development"
+---
+
+## Tech stack
+
+The Rust-Oleum HOME storefront is built on:
+
+| Layer | Technology | Version |
+|-------|-----------|---------|
+| **Ecommerce platform** | BigCommerce | Enterprise |
+| **Theme framework** | Stencil (Cornerstone) | 6.16.2 |
+| **Templating** | Handlebars v4 | — |
+| **CSS** | SCSS (Citadel toolkit) | — |
+| **Frontend framework** | React + MUI | React 18, MUI 5 |
+| **Widget system** | BigCommerce Widget Builder CLI | Custom fork |
+| **Build tool** | Webpack | — |
+| **Icons** | Phosphor Icons | 2.0.3 |
+
+## Repositories
+
+| Repo | Purpose |
+|------|---------|
+| `ro-web-bigcommerce` | Stencil theme, React components, SCSS, Handlebars templates, widget hydration |
+| `widget-builder` | Widget Builder CLI for creating, previewing, and publishing Page Builder widgets |
+| `docs` | This documentation site (Mintlify) |
+
+## Key URLs
+
+| Resource | URL |
+|----------|-----|
+| **Live storefront** | [rustoleumhome.com](https://rustoleumhome.com) |
+| **BigCommerce admin** | [store-t5arr0qby1.mybigcommerce.com/manage/dashboard](https://store-t5arr0qby1.mybigcommerce.com/manage/dashboard) |
+| **Page Builder** | [store-t5arr0qby1.mybigcommerce.com/manage/page-builder/?channelId=1](https://store-t5arr0qby1.mybigcommerce.com/manage/page-builder/?channelId=1) |
+| **Products admin** | [store-t5arr0qby1.mybigcommerce.com/manage/products](https://store-t5arr0qby1.mybigcommerce.com/manage/products) |
+| **This docs site** | [sparklabsprojects.mintlify.app](https://sparklabsprojects.mintlify.app) |
+| **Mintlify dashboard** | [dashboard.mintlify.com](https://dashboard.mintlify.com) |
+
+## Docs site domain
+
+The documentation site is hosted on Mintlify at `sparklabsprojects.mintlify.app`. The `.mintlify.app` subdomain slug is set at project creation time and **cannot be changed** through the dashboard.
+
+To get a `rustoleumhome` subdomain, either:
+
+1. **Contact Mintlify support** at [hi@mintlify.com](mailto:hi@mintlify.com) to rename the slug
+2. **Create a new project** in the Mintlify dashboard with slug `rustoleumhome` pointing at the same GitHub repo
+3. **Set up a custom domain** (e.g., `docs.rustoleumhome.com`) in the Mintlify dashboard under **Settings > Domain setup**, then configure a DNS CNAME record
+
+<Frame caption="The Mintlify dashboard only shows custom domain setup, not subdomain renaming.">
+  <img src="/images/mintlify-domain-setup.png" alt="Mintlify domain setup page" />
+</Frame>
+
+## Next steps
+
+<Columns cols={2}>
+  <Card title="Architecture" icon="sitemap" href="/dev/architecture">
+    Understand how the pieces connect.
+  </Card>
+  <Card title="Local setup" icon="terminal" href="/dev/local-setup">
+    Get your development environment running.
+  </Card>
+</Columns>

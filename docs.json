@@ -1,68 +1,87 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "Rust-Oleum HOME",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#5F6D68",
+    "light": "#7A8B85",
+    "dark": "#3D4A45"
   },
   "favicon": "/favicon.svg",
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Developer Guide",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Getting Started",
             "pages": [
-              "index",
-              "quickstart",
-              "development"
+              "dev/index",
+              "dev/architecture",
+              "dev/local-setup"
             ]
           },
           {
-            "group": "Customization",
+            "group": "Widget Development",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation"
+              "dev/widget-overview",
+              "dev/creating-widgets",
+              "dev/widget-files",
+              "dev/publishing-widgets",
+              "dev/syncing-widgets"
             ]
           },
           {
-            "group": "Writing content",
+            "group": "Theme Development",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
+              "dev/theme-overview",
+              "dev/styles",
+              "dev/pdp-images",
+              "dev/react-components"
             ]
           },
           {
-            "group": "AI tools",
+            "group": "Deployment",
             "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
+              "dev/stencil-deploy",
+              "dev/gotchas"
             ]
           }
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "Content Entry Guide",
         "groups": [
           {
-            "group": "API documentation",
+            "group": "Getting Started",
             "pages": [
-              "api-reference/introduction"
+              "content/index",
+              "content/page-builder-basics"
             ]
           },
           {
-            "group": "Endpoint examples",
+            "group": "Managing Content",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "content/editing-widgets",
+              "content/hero-carousel",
+              "content/gallery-page",
+              "content/faq-blocks",
+              "content/common-widgets"
+            ]
+          },
+          {
+            "group": "Product Management",
+            "pages": [
+              "content/product-images",
+              "content/product-options",
+              "content/flooring-kits"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "content/widget-catalog",
+              "content/troubleshooting"
             ]
           }
         ]
@@ -71,14 +90,14 @@
     "global": {
       "anchors": [
         {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
+          "anchor": "BigCommerce Admin",
+          "href": "https://store-t5arr0qby1.mybigcommerce.com/manage/dashboard",
+          "icon": "store"
         },
         {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
+          "anchor": "Page Builder",
+          "href": "https://store-t5arr0qby1.mybigcommerce.com/manage/page-builder/?channelId=1",
+          "icon": "browser"
         }
       ]
     }
@@ -90,33 +109,25 @@
   "navbar": {
     "links": [
       {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "label": "Store Admin",
+        "href": "https://store-t5arr0qby1.mybigcommerce.com/manage/dashboard"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "label": "Page Builder",
+      "href": "https://store-t5arr0qby1.mybigcommerce.com/manage/page-builder/?channelId=1"
     }
   },
   "contextual": {
     "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
+      "copy",
+      "view",
+      "cursor",
+      "vscode"
+    ]
   },
   "footer": {
-    "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
-    }
+    "socials": {}
   }
 }

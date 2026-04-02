@@ -1,0 +1,71 @@
+---
+title: "Product options and variants"
+description: "How product options affect the PDP display and how to manage variant images"
+---
+
+## What are product options?
+
+Product options are attributes like color, finish, or size that customers can choose from on the PDP. Each combination of options creates a **variant** — a specific purchasable version of the product.
+
+For Rust-Oleum HOME products, the most common option is **Finish** or **Color** (e.g., Natural, Slate, White).
+
+## How options display on the PDP
+
+The `ProductOptions` React component renders options as interactive controls:
+
+- **Color/swatch options** — Displayed as clickable color swatches
+- **Dropdown options** — Standard select menus
+- **Radio options** — Radio button groups
+
+When a customer selects an option, the PDP updates:
+
+1. **Gallery** — Scrolls to the variant's assigned image
+2. **Price** — Updates if the variant has a different price
+3. **SKU** — Updates in the product details
+4. **Availability** — Shows stock status for the selected variant
+
+## Managing options in BigCommerce
+
+### Edit existing options
+
+1. Go to [Products](https://store-t5arr0qby1.mybigcommerce.com/manage/products) > click a product
+2. Scroll to **Product Options** or **Variants** section
+3. Edit option values (labels, swatches, etc.)
+
+### Assign variant images
+
+Each variant can have its own image. When selected, the PDP gallery automatically shows it.
+
+1. In the **Variants** section, click a specific variant
+2. Upload or select an image for that variant
+3. Save
+
+<Note>
+  The variant image must also exist in the product's main image gallery for the best experience. The gallery will scroll to it rather than prepending a duplicate.
+</Note>
+
+## How variant images work technically
+
+When a customer selects a variant:
+
+1. BigCommerce fires an `onProductOptionsChanged` event
+2. The event includes the variant's image URL
+3. `ProductView` checks if this image already exists in the gallery by comparing filenames
+4. If found, the gallery scrolls to it
+5. If not found, the image is temporarily prepended as the first gallery image
+
+This means:
+
+- **Best practice**: Upload the variant image to both the variant AND the product's main gallery. This prevents duplication and ensures proper alt text.
+- **Gotcha**: If a variant image is only assigned at the variant level (not in the main gallery), it will appear with generic alt text `"Product image"` instead of a descriptive alt.
+
+## Linking to specific variants
+
+Use query parameters to deep-link to a product showing a specific finish:
+
+```
+https://rustoleumhome.com/product-name/?finish=Natural
+https://rustoleumhome.com/product-name/?color=Slate
+```
+
+This matches the query parameter value against image alt text (not option names). See [Product images](/content/product-images) for details on setting up alt text correctly.

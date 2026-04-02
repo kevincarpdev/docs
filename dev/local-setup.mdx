@@ -1,0 +1,112 @@
+---
+title: "Local development setup"
+description: "Get the widget builder and Stencil theme running locally"
+---
+
+## Prerequisites
+
+- **Node.js** 18 or later
+- **npm** 9.5.1 or later
+- **Git**
+- **Stencil CLI** (`npm install -g @bigcommerce/stencil-cli`)
+
+## Clone the repositories
+
+```bash
+git clone <ro-web-bigcommerce-repo-url>
+git clone <widget-builder-repo-url>
+```
+
+Place them as siblings in your workspace:
+
+```
+~/Work/
+├── ro-web-bigcommerce/
+└── widget-builder/
+```
+
+The sync script expects this layout by default.
+
+## Widget Builder setup
+
+### 1. Install dependencies
+
+```bash
+cd widget-builder
+npm install
+```
+
+### 2. Build the CLI
+
+```bash
+npm run install-cli
+```
+
+This compiles TypeScript and makes the `widget-builder` command available.
+
+### 3. Create `.env`
+
+Run the interactive setup:
+
+```bash
+widget-builder init
+```
+
+Or create `.env` manually with these values:
+
+```bash
+WIDGET_BUILDER_API_GATEWAY_BASE=https://api.bigcommerce.com/stores/<store-hash>/v3
+WIDGET_BUILDER_AUTH_ID=<api-account-id>
+WIDGET_BUILDER_AUTH_TOKEN=<api-token>
+WIDGET_BUILDER_CHANNEL_ID=1
+```
+
+<Warning>
+  The `.env` file contains API credentials. Never commit it to version control.
+</Warning>
+
+### 4. Preview a widget
+
+```bash
+widget-builder start HeroSectionCarousel
+```
+
+Opens `http://localhost:8080` with a live preview of the widget.
+
+## Stencil theme setup
+
+### 1. Install dependencies
+
+```bash
+cd ro-web-bigcommerce
+npm install
+```
+
+### 2. Configure Stencil
+
+```bash
+cd stencil-themes/rustoleum-home
+stencil init
+```
+
+You will need the **BigCommerce store URL** and a **Stencil CLI token** (generated in the BC admin under API Accounts).
+
+### 3. Start local development
+
+```bash
+npm run stencil:start
+```
+
+This starts the Stencil local server with live reload. The webpack build compiles React components and SCSS.
+
+### 4. Build for production
+
+```bash
+npm run build
+```
+
+This runs the production webpack build.
+
+## VS Code workspace
+
+The repo includes a VS Code workspace file at `ro-web-bigcommerce/ro-web-bigcommerce.code-workspace` that includes both the theme and `widget-builder` as workspace folders.

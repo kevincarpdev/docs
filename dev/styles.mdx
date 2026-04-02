@@ -1,0 +1,113 @@
+---
+title: "Styles and theming"
+description: "How to make style changes using SCSS, MUI styled components, and the theme system"
+---
+
+## Two style systems
+
+The Rust-Oleum HOME storefront uses two parallel styling systems:
+
+| System | Used for | Location |
+|--------|----------|----------|
+| **SCSS** | Global styles, legacy Stencil templates, Page Builder regions, typography | `assets/scss/` |
+| **MUI styled components** | React PDP components, interactive widgets | `assets/js/components/`, `assets/js/themes/` |
+
+## SCSS
+
+### Entry point
+
+`assets/scss/theme.scss` is the global SCSS entry. It imports:
+
+1. **Citadel toolkit** — BigCommerce's base SCSS framework
+2. **Component styles** — Individual component stylesheets
+3. **Layout styles** — Page-specific layouts
+4. **Custom overrides** — Rust-Oleum HOME customizations
+
+### Key SCSS files
+
+| File | Purpose |
+|------|---------|
+| `assets/scss/theme.scss` | Main entry, imports everything |
+| `assets/scss/layouts/products/_productView.scss` | PDP layout, breadcrumbs, `.pdp-page` styles |
+| `assets/scss/components/` | Component-level styles |
+
+### Making SCSS changes
+
+1. Edit the appropriate SCSS file
+2. Run `npm run buildDev` to compile
+3. Preview locally with `stencil start`
+
+## MUI theme
+
+React components use Material UI's `styled()` API with a custom theme defined in `assets/js/themes/rustoleumHomeTheme.js`.
+
+### Theme tokens
+
+The theme provides centralized tokens that all React components should use:
+
+```js
+export const colors = {
+  content: {
+    primary: '...',
+    secondary: '...',
+    tertiary: '...',
+  },
+  surface: {
+    1: '...',
+    2: '...',
+  },
+  // ...
+};
+
+export const transitions = {
+  fast: '...',
+  medium: '...',
+};
+
+export const layoutConstants = {
+  componentWidths: {
+    contentMaxWidth: '...',
+  },
+};
+```
+
+### Style rules
+
+<Warning>
+  These rules must be followed for all React component styling.
+</Warning>
+
+| Rule | Do | Don't |
+|------|-----|-------|
+| **Colors** | `colors.content.primary` | `'#333'` or `'black'` |
+| **Spacing** | `theme.spacing(4)` | `'16px'` or `16` |
+| **Font sizes** | `theme.typography.fontSizes.*` | `'14px'` |
+| **Component styling** | `styled(Box)(...)` | `sx={{ ... }}` |
+| **Inline styles** | `styled()` component | `style={{ color: 'red' }}` |
+
+### Example: creating a styled component
+
+```jsx
+import { Box, styled } from '@mui/material';
+import { colors, transitions } from '../themes/rustoleumHomeTheme';
+
+const CardWrapper = styled(Box)(({ theme }) => ({
+  backgroundColor: colors.surface[1],
+  borderRadius: theme.spacing(2),
+  padding: theme.spacing(4),
+  transition: transitions.fast,
+  [theme.breakpoints.down('md')]: {
+    padding: theme.spacing(2),
+  },
+}));
+```
+
+### Icons
+
+Use `@phosphor-icons/react` exclusively for React component icons. Do not use custom SVGs or other icon libraries.
+
+```jsx
+import { ShieldCheck } from '@phosphor-icons/react';
+
+<ShieldCheck size={24} weight="regular" />
+```

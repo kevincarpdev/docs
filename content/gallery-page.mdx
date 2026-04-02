@@ -1,0 +1,69 @@
+---
+title: "Inspiration Gallery"
+description: "How to manage the Inspiration Gallery page and its image sections"
+---
+
+## Overview
+
+The Inspiration Gallery page showcases customer and editorial photos organized by surface type and room. It uses the **GalleryBlock** widget with filterable tabs and category tags.
+
+<Frame>
+  <img src="/images/page-builder-gallery.png" alt="Page Builder showing gallery widget settings" />
+</Frame>
+
+## Page structure
+
+The gallery page consists of:
+
+1. **Page title** — "Inspiration Gallery" (editable at the top of the widget settings)
+2. **Filter tabs** — Surface / Room tabs with count indicators
+3. **Category filters** — Tags like "Floor", "Countertop" within each tab
+4. **Image cards** — Individual gallery entries with metadata
+
+## Editing section settings
+
+Click the Gallery widget on the page to open settings. Each section groups related images together.
+
+### Section-level settings
+
+Configure overall section behavior in the "Section N Settings" area.
+
+## Editing individual images
+
+Each image within a section has its own settings under "Section N - Image N":
+
+| Field | Description | Example |
+|-------|-------------|---------|
+| **Image** | The gallery photo | Upload via Image Manager |
+| **Article Text** | Title or caption for the image | `Article Text goes here` |
+| **Categories** | Comma-separated category tags | `Countertop, Kitchen` |
+| **Featured Product** (optional) | Link to a related product | Search: `Rust-Oleum HOME Countertop...` |
+| **Has Article Link** | Whether to show a link below the image | `Yes` / `No` |
+| **Article Link Text** | Label for the article link | `Article Link` |
+| **Article Link URL** | Destination URL for the link | `www.testing.com` |
+| **Link Thumbnail Image** | Small image for the link card | Upload via Image Manager |
+| **Link Text** | Description text for the link | `Rust-Oleum HOME Floor Coating...` |
+| **Link URL** | URL the thumbnail links to | Product or article URL |
+
+### Image guidelines
+
+- **Gallery images**: At least 800px wide, landscape orientation preferred
+- **Thumbnail images**: At least 200px wide
+- **Format**: JPEG for photographs, PNG for graphics
+
+### Categories
+
+Categories control which filter tab an image appears under. Use consistent naming:
+
+- `Floor`, `Countertop`, `Cabinet` for surface type
+- `Kitchen`, `Bathroom`, `Living Room` for room type
+
+Separate multiple categories with commas: `Countertop, Kitchen`
+
+## Adding new images
+
+To add more images to a section, look for available "Section N - Image N" settings slots. Each section supports multiple images.
+
+## Reordering
+
+Image order within a section is determined by the numbering in the settings panel (Image 1 appears first, Image 2 second, etc.). To reorder, you need to swap the content between image slots.

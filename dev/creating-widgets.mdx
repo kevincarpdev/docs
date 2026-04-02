@@ -1,0 +1,169 @@
+---
+title: "Creating widgets"
+description: "How to create a new Page Builder widget from scratch"
+---
+
+## Create a widget folder
+
+Use the CLI to scaffold a new widget:
+
+```bash
+cd widget-builder
+widget-builder create MyNewWidget
+```
+
+This creates:
+
+```
+MyNewWidget/
+├── widget.html      # Handlebars template
+├── schema.json      # Page Builder field definitions
+└── config.json      # Default values for preview
+```
+
+You also need to manually create `meta.json` to control how the widget appears in the Page Builder catalog.
+
+## Widget file anatomy
+
+### widget.html
+
+The Handlebars template that BigCommerce renders. It outputs a `div` with `data-*` attributes that the React component reads:
+
+```html
+<div
+  id="my-widget-{{guid}}"
+  class="ro-my-widget"
+  data-widget-type="mywidget"
+  data-heading="{{heading}}"
+  data-subheading="{{subheading}}"
+  data-image="{{imageUrl}}"
+>
+  <!-- Page Builder preview content (hidden on live site) -->
+  <div class="widget-preview">
+    <h2>{{heading}}</h2>
+    <p>{{subheading}}</p>
+  </div>
+</div>
+```
+
+The `{{guid}}` token ensures unique IDs when multiple instances exist on a page.
+
+### schema.json
+
+Defines the editing UI that appears in Page Builder's left sidebar:
+
+```json
+[
+  {
+    "type": "tab",
+    "label": "Content",
+    "sections": [
+      {
+        "label": "Main Settings",
+        "settings": [
+          {
+            "type": "input",
+            "id": "heading",
+            "label": "Heading",
+            "default": "Default Heading"
+          },
+          {
+            "type": "input",
+            "id": "subheading",
+            "label": "Subheading",
+            "default": ""
+          },
+          {
+            "type": "imageManager",
+            "id": "imageUrl",
+            "label": "Image",
+            "default": {
+              "src": ""
+            }
+          }
+        ]
+      }
+    ]
+  }
+]
+```
+
+Common field types:
+
+| Type | Purpose |
+|------|---------|
+| `input` | Single-line text |
+| `text` | Multi-line textarea |
+| `imageManager` | Image upload via BigCommerce Image Manager |
+| `productId` | Product search/picker |
+| `select` | Dropdown menu |
+| `color` | Color picker |
+| `toggle` | Boolean on/off |
+| `number` | Numeric input |
+
+### config.json
+
+Default values used during widget preview. Keys must match the `id` fields in `schema.json`:
+
+```json
+{
+  "heading": "Default Heading",
+  "subheading": "Default subheading text",
+  "imageUrl": ""
+}
+```
+
+### meta.json
+
+Controls how the widget appears in the Page Builder widget catalog:
+
+```json
+{
+  "name": "My New Widget",
+  "icon_name": "grid-four",
+  "description": "A custom widget for the Rust-Oleum HOME storefront",
+  "category": "Rustoleum Home"
+}
+```
+
+Set `category` to `"Rustoleum Home"` so the widget appears grouped with all other custom widgets.
+
+## Phosphor Icons
+
+Widgets use [Phosphor Icons](https://phosphoricons.com) via CDN. The global stylesheet is already loaded on the storefront:
+
+```html
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/regular/style.css">
+```
+
+Usage in widget templates:
+
+```html
+<i class="ph ph-shield-check"></i>
+```
+
+Browse the full icon library at [phosphoricons.com](https://phosphoricons.com).
+
+## Live preview
+
+Start the local preview server:
+
+```bash
+widget-builder start MyNewWidget
+```
+
+This opens `http://localhost:8080` where you can see the widget rendered with its `config.json` defaults and edit schema fields in real time.
+
+## Adding the React component
+
+After creating the widget template, you need a corresponding React component in the Stencil theme:
+
+1. Create `ro-web-bigcommerce/stencil-themes/rustoleum-home/assets/js/components/MyNewWidget.jsx`
+2. Register it in `widgets-loader.js`:
+
+```js
+'mywidget': () => import('./components/MyNewWidget.jsx').then(m => m.MyNewWidget || m.default),
+'my-widget': () => import('./components/MyNewWidget.jsx').then(m => m.MyNewWidget || m.default),
+```
+
+Always register both the lowercase and hyphenated versions of the type name.

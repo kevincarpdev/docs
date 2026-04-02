@@ -1,0 +1,81 @@
+---
+title: "Deployment"
+description: "How to bundle and deploy the Stencil theme to BigCommerce"
+---
+
+## Build the theme
+
+Before deploying, run the production webpack build:
+
+```bash
+cd ro-web-bigcommerce/stencil-themes/rustoleum-home
+npm run build
+```
+
+This compiles all React components, SCSS, and JavaScript into the `assets/dist/` directory.
+
+## Bundle the theme
+
+Create a deployable theme zip file:
+
+```bash
+npm run bundle
+```
+
+This runs `stencil bundle`, which:
+1. Validates the theme configuration
+2. Creates a zip archive of all theme files
+3. Strips `.jsx` files from the bundle (they are already compiled by webpack)
+
+The output is a `.zip` file in the theme directory.
+
+## Push to BigCommerce
+
+Deploy the theme directly:
+
+```bash
+npm run push
+```
+
+This runs `stencil bundle` followed by `stencil push`, which uploads the theme to BigCommerce.
+
+You will be prompted to select which variation to apply. For the Rust-Oleum HOME storefront, apply to the active storefront channel.
+
+## Activate the theme
+
+After pushing, the theme appears in **BigCommerce Admin > Storefront > Themes**. If the push does not automatically activate it:
+
+1. Go to [store-t5arr0qby1.mybigcommerce.com/manage/themes](https://store-t5arr0qby1.mybigcommerce.com/manage/themes)
+2. Find the newly uploaded theme
+3. Click **Apply**
+
+## Deployment checklist
+
+<Steps>
+  <Step title="Build locally">
+    Run `npm run build` and verify no webpack errors.
+  </Step>
+  <Step title="Test locally">
+    Run `stencil start` and verify pages render correctly.
+  </Step>
+  <Step title="Bundle">
+    Run `npm run bundle` and confirm the zip is created.
+  </Step>
+  <Step title="Push">
+    Run `npm run push` and confirm upload succeeds.
+  </Step>
+  <Step title="Verify live">
+    Check the live storefront to confirm changes are visible.
+  </Step>
+</Steps>
+
+## Widget deployment vs. theme deployment
+
+These are **independent** processes:
+
+| What | How | When |
+|------|-----|------|
+| **Widget templates** | `widget-builder publish` via the Widgets API | Whenever widget HTML/schema changes |
+| **React components** | `stencil push` via theme deployment | Whenever component JS/SCSS changes |
+
+If you change a widget's **template** (the Handlebars HTML), publish it via widget-builder. If you change the **React component** that renders it, deploy the Stencil theme. Often, both are needed.

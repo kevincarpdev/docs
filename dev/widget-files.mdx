@@ -1,0 +1,174 @@
+---
+title: "Widget file reference"
+description: "Detailed reference for every file in a widget folder"
+---
+
+## File overview
+
+Each widget folder in `widget-builder/` can contain the following files:
+
+| File | Required | Purpose |
+|------|----------|---------|
+| `widget.html` | Yes | Handlebars template rendered by BigCommerce |
+| `schema.json` | Yes | Defines Page Builder editing fields |
+| `config.json` | Yes | Default values for preview |
+| `meta.json` | Recommended | Widget catalog name, icon, and category |
+| `widget.yml` | Auto-generated | Stores the BigCommerce template UUID after first publish |
+| `query.graphql` | Optional | Storefront GraphQL query for fetching product/category data |
+| `queryParams.json` | Optional | Parameters for the GraphQL query |
+
+## widget.html
+
+A Handlebars template that BigCommerce's rendering engine processes server-side. The output is static HTML that gets placed on the page.
+
+**Available variables:**
+- `{{guid}}` — Unique instance identifier
+- `{{setting_id}}` — Any value from `schema.json` settings
+- `{{json _.data.site.products.edges}}` — GraphQL query results (when `query.graphql` is present)
+
+**Pattern:** Most widgets output a single `div` with all configuration passed via `data-*` attributes, plus a preview block that is hidden on the live storefront:
+
+```html
+<div
+  id="widget-{{guid}}"
+  data-widget-type="mywidget"
+  data-config='{"heading":"{{heading}}","items":{{json items}}}'
+>
+  <!-- Preview-only content for Page Builder -->
+  <div class="widget-preview-only">
+    <h2>{{heading}}</h2>
+  </div>
+</div>
+```
+
+## schema.json
+
+A JSON array of tab objects. Each tab contains sections, and each section contains settings.
+
+**Structure:**
+
+```
+Tab → Section → Setting
+```
+
+**Full example with multiple field types:**
+
+```json
+[
+  {
+    "type": "tab",
+    "label": "Content",
+    "sections": [
+      {
+        "label": "Header",
+        "settings": [
+          { "type": "input", "id": "heading", "label": "Heading", "default": "" },
+          { "type": "text", "id": "description", "label": "Description", "default": "" }
+        ]
+      },
+      {
+        "label": "Image",
+        "settings": [
+          { "type": "imageManager", "id": "backgroundImage", "label": "Background Image", "default": { "src": "" } }
+        ]
+      },
+      {
+        "label": "Product",
+        "settings": [
+          { "type": "productId", "id": "featuredProduct", "label": "Featured Product", "default": "" }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "tab",
+    "label": "Design",
+    "sections": [
+      {
+        "label": "Colors",
+        "settings": [
+          { "type": "color", "id": "bgColor", "label": "Background Color", "default": "#FFFFFF" },
+          { "type": "toggle", "id": "showBorder", "label": "Show Border", "default": false }
+        ]
+      }
+    ]
+  }
+]
+```
+
+## config.json
+
+A flat JSON object where keys match the `id` values from `schema.json`. These values are used during local preview and serve as defaults.
+
+```json
+{
+  "heading": "Welcome",
+  "description": "This is the default description",
+  "backgroundImage": "",
+  "featuredProduct": "",
+  "bgColor": "#FFFFFF",
+  "showBorder": false
+}
+```
+
+## meta.json
+
+Controls the widget's appearance in the Page Builder widget catalog:
+
+```json
+{
+  "name": "My Widget",
+  "icon_name": "grid-four",
+  "description": "Short description shown in the widget picker",
+  "category": "Rustoleum Home"
+}
+```
+
+The `icon_name` value uses BigCommerce's built-in icon set. Common options: `grid-four`, `layout`, `type`, `image`, `star`.
+
+## widget.yml
+
+Auto-generated on first publish. Contains only the BigCommerce widget template UUID:
+
+```
+a1b2c3d4-e5f6-7890-abcd-ef1234567890
+```
+
+This file allows subsequent publishes to **update** the existing widget rather than creating a new one. Do not manually edit this file.
+
+## query.graphql (optional)
+
+A Storefront GraphQL query that BigCommerce executes server-side before rendering the widget. The results are available in the Handlebars template via `_.data`:
+
+```graphql
+query WidgetProducts($productIds: [Int!]) {
+  site {
+    products(entityIds: $productIds) {
+      edges {
+        node {
+          entityId
+          name
+          path
+          defaultImage {
+            url(width: 500)
+            altText
+          }
+          prices {
+            price { value currencyCode }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+## queryParams.json (optional)
+
+Maps schema field values to GraphQL query variables:
+
+```json
+{
+  "productIds": "{{productId1}},{{productId2}}"
+}
+```

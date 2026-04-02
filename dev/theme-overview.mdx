@@ -1,0 +1,81 @@
+---
+title: "Stencil theme structure"
+description: "How the Rust-Oleum HOME Stencil theme is organized"
+---
+
+## Base theme
+
+The storefront is built on **Cornerstone 6.16.2**, BigCommerce's default Stencil theme, with extensive customization.
+
+## Directory layout
+
+```
+ro-web-bigcommerce/
+├── stencil-themes/
+│   └── rustoleum-home/              # The active Stencil theme
+│       ├── assets/
+│       │   ├── js/
+│       │   │   ├── app.js              # Webpack entry — bootstraps React + widgets
+│       │   │   ├── widgets-loader.js   # Widget registry and hydration
+│       │   │   ├── components/         # React components (JSX)
+│       │   │   ├── themes/             # MUI theme (rustoleumHomeTheme.js)
+│       │   │   ├── utils/              # Shared utilities
+│       │   │   └── theme/              # Stencil page managers (legacy JS)
+│       │   └── scss/
+│       │       ├── theme.scss          # Global SCSS entry point
+│       │       ├── layouts/            # Page-specific layouts
+│       │       └── components/         # Component-level SCSS
+│       ├── templates/
+│       │   ├── pages/                  # Top-level page templates
+│       │   │   ├── product.html        # PDP page
+│       │   │   ├── category.html       # Category listing page
+│       │   │   └── ...
+│       │   ├── components/             # Reusable partials
+│       │   │   └── products/
+│       │   │       ├── product-view.html   # Main PDP partial
+│       │   │       └── ...
+│       │   └── layout/
+│       │       └── base.html           # Base layout wrapper
+│       ├── custom-widgets-backup/      # Synced widget files (not deployed)
+│       ├── config.json                 # Theme settings
+│       ├── schema.json                 # Theme Editor schema
+│       ├── webpack.common.js           # Webpack shared config
+│       └── package.json                # Theme dependencies and scripts
+└── packages/                           # Shared workspace packages
+```
+
+## Build system
+
+The theme uses **Webpack** for JavaScript bundling. The entry point is `assets/js/app.js`, which imports React components, widget loaders, and page-specific logic.
+
+### Build commands
+
+| Command | Description |
+|---------|-------------|
+| `npm run build` | Production webpack build |
+| `npm run buildDev` | Development webpack build (with source maps) |
+| `npm run bundle` | `stencil bundle` — creates a deployable theme zip |
+| `npm run push` | Bundle + `stencil push` — deploys to BigCommerce |
+
+### How app.js bootstraps
+
+1. Detects the current page type (`product`, `category`, etc.)
+2. For PDP pages: fetches product metafields and channel metafields via GraphQL
+3. Mounts `ProductView` React component into `#react-product-view`
+4. Calls `initAllReactWidgets()` to hydrate any Page Builder widgets on the page
+
+## Handlebars templating
+
+Templates use BigCommerce's Handlebars v4 engine with custom helpers:
+
+- `{{json product}}` — Serializes data as JSON for React to consume
+- `{{getImageSrcset this ...}}` — Generates responsive image srcsets
+- `{{lang 'key'}}` — Localized string lookup
+- `{{#each}}`, `{{#if}}`, `{{#unless}}` — Standard Handlebars control flow
+- `{{inject 'key' value}}` — Makes data available to JavaScript via `jsContext`
+
+## Theme configuration
+
+`config.json` holds theme settings (product counts, image sizes, feature flags). `schema.json` defines the Theme Editor UI for store owners to customize these settings.
+
+These are standard Cornerstone configs and rarely need modification for content changes.

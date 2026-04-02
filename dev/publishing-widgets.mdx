@@ -1,0 +1,88 @@
+---
+title: "Publishing widgets"
+description: "How to publish widget templates to BigCommerce and manage updates"
+---
+
+## Publish a single widget
+
+```bash
+cd widget-builder
+widget-builder publish <widget-name>
+```
+
+For example:
+
+```bash
+widget-builder publish HeroSectionCarousel
+```
+
+This sends the widget template to the BigCommerce Widgets API. On first publish, a UUID is saved to `<widget-name>/widget.yml`. Subsequent publishes update the same widget template.
+
+## Publish and sync in one step
+
+The `publish-widget.sh` script publishes and syncs in one command:
+
+```bash
+./publish-widget.sh HeroSectionCarousel
+```
+
+This runs:
+1. `widget-builder publish <name>` — pushes to BigCommerce
+2. `./sync-widgets.sh to-stencil <name>` — copies files to the Stencil theme backup
+
+## Bulk publish all widgets
+
+```bash
+./publish-all-widgets.sh
+```
+
+This publishes all 22 production widgets in sequence and syncs each to the Stencil theme. If any publish fails, the script exits with an error code.
+
+## How UUID tracking works
+
+When you publish a widget for the first time, the BigCommerce API returns a UUID. This UUID is written to `widget.yml` in the widget folder:
+
+```
+a1b2c3d4-e5f6-7890-abcd-ef1234567890
+```
+
+On subsequent publishes, the CLI reads this UUID and sends a **PUT** request (update) instead of a **POST** (create). This means:
+
+- The widget retains its placement on all pages where it has been used
+- Content editors do not need to re-add the widget after an update
+- All existing instances reflect the updated template
+
+<Warning>
+  If you delete `widget.yml` and publish again, a **new** widget template will be created with a new UUID. Existing placements on pages will still reference the old UUID and will not receive updates.
+</Warning>
+
+## What gets published
+
+The publish command sends these files to the API:
+
+| File | API field |
+|------|-----------|
+| `widget.html` | `template` |
+| `schema.json` | `schema` |
+| `query.graphql` | `storefront_api_query` (empty string if not present) |
+| `queryParams.json` | Query parameters |
+
+The `config.json` and `meta.json` files are **not sent** — they are used only for local preview and catalog metadata.
+
+## Channel targeting
+
+By default, widgets publish to **channel 1** (the primary storefront). To target a different channel, set the environment variable:
+
+```bash
+WIDGET_BUILDER_CHANNEL_ID=2
+```
+
+## Unpublish (advanced)
+
+An unpublish command exists at `src/cli/deployment/widgetTemplateUnpublish.ts` but is **not currently registered** in the CLI. To unpublish a widget, you would need to use the BigCommerce API directly:
+
+```bash
+curl -X DELETE \
+  "https://api.bigcommerce.com/stores/<store-hash>/v3/content/widget-templates/<uuid>" \
+  -H "X-Auth-Token: <api-token>"
+```
