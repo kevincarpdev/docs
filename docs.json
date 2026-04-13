@@ -56,17 +56,15 @@
             "group": "Getting Started",
             "pages": [
               "content/index",
-              "content/page-builder-basics"
+              "content/page-builder-basics",
+              "content/editing-widgets"
             ]
           },
           {
             "group": "Managing Content",
             "pages": [
-              "content/editing-widgets",
-              "content/hero-carousel",
               "content/gallery-page",
-              "content/faq-blocks",
-              "content/common-widgets"
+              "content/faq-blocks"
             ]
           },
           {
@@ -78,9 +76,21 @@
             ]
           },
           {
+            "group": "Widget Reference",
+            "pages": [
+              "content/widget-reference",
+              "content/widgets/hero-banners",
+              "content/widgets/editorial-values",
+              "content/widgets/product",
+              "content/widgets/gallery-media",
+              "content/widgets/educational-process",
+              "content/widgets/community-social",
+              "content/widgets/blog-content"
+            ]
+          },
+          {
             "group": "Reference",
             "pages": [
-              "content/widget-catalog",
               "content/troubleshooting"
             ]
           }

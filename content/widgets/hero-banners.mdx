@@ -1,0 +1,249 @@
+---
+title: "Hero & Banners"
+description: "Full-width hero sections and promotional banners — the first thing visitors see on any page."
+---
+
+Use hero and banner widgets at the top of pages to anchor the layout, set brand tone, and drive primary actions. These widgets support rich media, CTAs, and flexible copy structures.
+
+<Note>
+**How to edit any widget in Page Builder**
+
+1. Open **Storefront → Page Builder** in the BigCommerce admin
+2. Select the page from the page picker at top-left
+3. Click the widget on the canvas — a **config panel** opens in the left sidebar
+4. To access layout settings, click the **`...` (ellipsis)** icon at the top-right of the sidebar — this opens the **Settings** panel with an Anchor field
+5. Click **Save** when done, then **Publish** to push changes live
+</Note>
+
+---
+
+## Hero Carousel
+
+A rotating multi-slide hero for the homepage or campaign landing pages. Each slide is independently authored and can carry its own image, copy, and two CTAs.
+
+<Frame caption="Hero Carousel — config panel (top fields)">
+  ![Hero Carousel config panel showing Badge, Headline, and Subheadline fields](/content/images/widgets/hero-carousel/config-top.png)
+</Frame>
+
+<Frame caption="Hero Carousel — config panel (lower fields)">
+  ![Hero Carousel config panel showing Background Image, Panel Color, Button, and Footer fields](/content/images/widgets/hero-carousel/config-bottom.png)
+</Frame>
+
+<Frame caption="Hero Carousel — Settings panel (via the ··· ellipsis)">
+  ![Hero Carousel Settings panel showing the Anchor optional field](/content/images/widgets/hero-carousel/settings.png)
+</Frame>
+
+### How to add a slide
+
+1. Click the widget on canvas to open its config panel
+2. Scroll to the **Slides** section and click **+ Add Item**
+3. Fill in the fields for that slide (see table below)
+4. Repeat for additional slides — carousel auto-advances every 5 seconds
+
+### Fields (per slide)
+
+| Field | Label in UI | Type | Description |
+|-------|-------------|------|-------------|
+| `badge` | Badge | Text | Short label displayed in a pill above the headline (e.g., "New Arrivals") — optional |
+| `badgeSubtext` | Badge Subtext | Text | Secondary text next to the badge pill — optional |
+| `badgeURL` | Badge URL | URL | Makes the badge a clickable link — optional |
+| `headline` | Headline | Rich text | Primary headline for the slide |
+| `subheadline` | Subheadline | Rich text | Secondary line beneath the headline — optional |
+| `image` | Background Image | Image | Full-bleed background image for the slide |
+| `panelColor` | Panel Color | Color | Hex color for the copy panel background — default `#5F6D68` (Rust-Oleum brand green) |
+| `primaryButtonText` | Primary Button Text | Text | Label for the main CTA button |
+| `primaryButtonUrl` | Primary Button URL | URL | Destination for the primary CTA |
+| `secondaryButtonText` | Secondary Button Text | Text | Optional second button label |
+| `secondaryButtonUrl` | Secondary Button URL | URL | Destination for the secondary button — optional |
+| `footerText` | Footer Text | Text | Fine-print line below the buttons — optional |
+| `footerLink` | Footer Link | URL | URL for the footer text — optional |
+
+### Settings panel (via `...` ellipsis)
+
+| Field | Description |
+|-------|-------------|
+| `Anchor` | Optional `#id` slug for in-page deep linking (e.g., `hero-top`). Allows linking directly to this section from nav or other widgets. |
+
+### Guidelines
+
+- Keep headlines under 60 characters for clean wrapping on mobile.
+- Use `panelColor` to match the copy panel to the product's color story — the default is Rust-Oleum brand green (`#5F6D68`).
+- The primary button should always be present; the secondary button is optional for campaigns with two distinct paths.
+- Slides auto-advance every 5 seconds. Navigation arrows and dot indicators are shown automatically — no configuration needed.
+
+### Image guidelines
+
+| Property | Value |
+|----------|-------|
+| Recommended size | 1440 × 700 px minimum |
+| Format | JPG or WebP for photos; PNG for graphics with transparency |
+| Focal point | Center-frame — image crops from edges on smaller screens |
+
+---
+
+## Hero
+
+The single-panel hero widget used for interior page headers and product-line landing pages. Supports image or video background, optional promo labels, layout variants, and an optional Roomvo surface-selector integration.
+
+<Frame caption="Hero — config panel">
+  ![Hero widget config panel](/content/images/widgets/hero/config.png)
+</Frame>
+
+<Frame caption="Hero — Settings panel">
+  ![Hero Settings panel with Anchor field](/content/images/widgets/hero/settings.png)
+</Frame>
+
+### Fields
+
+| Field | Label in UI | Type | Description |
+|-------|-------------|------|-------------|
+| `type` | Type | Select | **Image** or **Video** — determines which media field is used |
+| `image` | Image | Image | Hero background image (used when Type = Image) |
+| `videoUrl` | Video URL | URL | Direct `.mp4` URL (used when Type = Video) |
+| `heading` | Heading | Text | Primary heading — can be left blank for image-only heroes |
+| `body` | Body | Rich text | Supporting copy beneath the heading |
+| `discountLabelText` | Label Text | Text | Promotional label copy (e.g., "Save 20%") — optional |
+| `discountLabelPillText` | Pill Text | Text | Short highlight inside the label pill (e.g., "Limited Time") — optional |
+| `backgroundColor` | Background Color | Select | Preset background color for the copy area |
+| `backgroundColorPicker` | Custom Color | Color | Hex override for a custom background color |
+| `ctaSecondaryTagline` | Secondary Tagline | Text | Optional tagline shown alongside CTA buttons |
+| `layoutVariant` | Layout Variant | Select | Controls overall layout (Full-width, Homepage, Roomvo, etc.) |
+| `desktopArrangement` | Desktop Arrangement | Select | Controls copy/image split on desktop |
+| `mobileArrangement` | Mobile Arrangement | Select | Controls stacking order on mobile |
+| `surfaceSelectorEnabled` | Surface Selector | Toggle | Enable the Roomvo surface visualization tool |
+
+### Settings panel (via `...` ellipsis)
+
+| Field | Description |
+|-------|-------------|
+| `Anchor` | Optional `#id` for in-page deep linking |
+
+### Guidelines
+
+- Use the **Homepage** layout variant for the widest visual impact on product-line pages.
+- The **Roomvo** variant activates the surface selector — only use on paint and coating pages where the visualization tool is applicable.
+- Leave `heading` and `body` blank for pure editorial image heroes and control all copy through the image asset itself.
+- Videos must be hosted as direct `.mp4` URLs — YouTube/Vimeo embeds are not supported here.
+
+### Image guidelines
+
+| Property | Value |
+|----------|-------|
+| Full-width hero | 1440 × 700 px |
+| Standard hero | 1440 × 500 px |
+| Video | Direct-hosted `.mp4`, 16:9 aspect ratio |
+
+---
+
+## Horizontal Banner
+
+A full-width marketing band with a title, body copy, a CTA button with optional icon, and a paginated image strip. Used for mid-page promotional messaging or feature callouts.
+
+<Frame caption="Horizontal Banner — config panel">
+  ![Horizontal Banner config panel](/content/images/widgets/horizontal-banner/config.png)
+</Frame>
+
+<Frame caption="Horizontal Banner — Settings panel">
+  ![Horizontal Banner Settings panel with Anchor field](/content/images/widgets/horizontal-banner/settings.png)
+</Frame>
+
+### Fields
+
+| Field | Label in UI | Type | Description |
+|-------|-------------|------|-------------|
+| `title` | Title | Text | Banner headline |
+| `body` | Body | Text | Supporting copy beneath the title |
+| `ctaText` | CTA Text | Text | Button label |
+| `ctaIcon` | CTA Icon | Select | Icon on the button: **No icon**, Arrow Up Right, Shield Check, Currency Dollar, Lightning, Star, **Other** |
+| `ctaIconName` | CTA Custom Icon Name | Text | Phosphor icon name — only used when CTA Icon = "Other" (see [Phosphor Icons](#phosphor-icons)) |
+| `ctaDestinationType` | CTA Destination Type | Select | **Page URL** or **Product URL** |
+| `ctaPageUrl` | Page URL | URL | Destination if linking to a page |
+| `ctaProductUrl` | Product URL | URL | Destination if linking to a product |
+| `images` | Images | Array | Images that paginate horizontally alongside the copy (add 2–4) |
+
+### Settings panel (via `...` ellipsis)
+
+| Field | Description |
+|-------|-------------|
+| `Anchor` | Optional `#id` for in-page deep linking |
+
+### Guidelines
+
+- Add 2–4 images to the image array — they paginate as a mini-carousel alongside the copy.
+- Choose a CTA icon that matches intent: Arrow for navigation, Shield for trust/warranty, Lightning for urgency.
+- If you need a custom icon not in the preset list, select **Other** and enter the Phosphor icon name manually (see the [Phosphor Icons guide](#phosphor-icons) below).
+
+### Image guidelines
+
+| Property | Value |
+|----------|-------|
+| Recommended size | 600 × 600 px (square or slight landscape) |
+| Style | Consistent scale; clean or lifestyle backgrounds |
+
+---
+
+## Offer Banner
+
+A split promotional banner with left-side editorial copy (heading, subheader, CTA) and a right-side product or lifestyle image. Best used for limited-time promotions or feature callouts.
+
+<Frame caption="Offer Banner — config panel">
+  ![Offer Banner config panel](/content/images/widgets/offer-banner/config.png)
+</Frame>
+
+<Frame caption="Offer Banner — Settings panel">
+  ![Offer Banner Settings panel with Anchor field](/content/images/widgets/offer-banner/settings.png)
+</Frame>
+
+### Fields
+
+| Field | Label in UI | Type | Description |
+|-------|-------------|------|-------------|
+| `header` | Header | Rich text | Primary promotional heading |
+| `subheader` | Subheader | Rich text | Supporting line beneath the heading |
+| `buttonText` | Button Text | Text | CTA button label |
+| `buttonUrl` | Button URL | URL | Destination for the CTA |
+| `image` | Right Image | Image | Product or lifestyle image displayed on the right side |
+
+### Settings panel (via `...` ellipsis)
+
+| Field | Description |
+|-------|-------------|
+| `Anchor` | Optional `#id` for in-page deep linking |
+
+### Guidelines
+
+- Keep headers to 2 lines maximum at desktop width.
+- The image occupies the right half of the banner — use square or portrait images; avoid wide landscapes.
+- Pair this widget with a **Title Section** above for promotional pages that need a label + offer structure.
+
+### Image guidelines
+
+| Property | Value |
+|----------|-------|
+| Square | 640 × 640 px |
+| Portrait | 640 × 800 px |
+
+---
+
+## Phosphor Icons
+
+Several widgets (Horizontal Banner, Environment Block, Categories, etc.) allow you to specify a **Phosphor icon** by name. Phosphor is the icon library used across Rust-Oleum HOME.
+
+### How to find an icon
+
+1. Go to **[phosphoricons.com](https://phosphoricons.com)**
+2. Browse or search for the icon you want (e.g., search "leaf", "paint", "star")
+3. Click the icon — the name shown (e.g., `PaintBrush`) is the icon identifier
+4. In the widget field, enter the name in **kebab-case** lowercase (e.g., `paint-brush`) **or** the exact name as shown — check the field label for which format is expected
+
+<Note>
+Common icon names used in Rust-Oleum HOME: `leaf`, `plant`, `lightning`, `shield-check`, `arrow-up-right`, `star`, `paint-bucket`, `hammer`, `house`
+</Note>
+
+### Where icons appear
+
+| Widget | Field |
+|--------|-------|
+| Horizontal Banner | CTA Icon → "Other" → Custom Icon Name |
+| Environment Block | Feature pill icons |
+| Categories | Card icons |

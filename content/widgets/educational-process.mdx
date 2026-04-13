@@ -1,0 +1,119 @@
+---
+title: "Educational & Process"
+description: "Step-by-step guides, product comparisons, and how-it-works sections that build customer confidence."
+---
+
+Educational widgets help customers understand how to use products, make informed purchase decisions, and navigate complex product attributes. They tend to appear on product category pages, buying guides, and DIY project pages.
+
+---
+
+## How It Works
+
+A step-by-step instructional section with two layout variants: **Categories** (tabbed steps with per-category content) and **Flat** (a single linear flow with a CTA). Used to explain application processes, multi-step DIY projects, and product workflows.
+
+### Fields
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `variant` | Variant | **Categories** — tab-based step navigation, or **Flat** — linear step list |
+| `tagline` | Subheading | Small label above the headline (e.g., "It's Simple") |
+| `headline` | Heading | Section headline — supports rich text |
+| `bodyCopy` | Body | Supporting copy beneath the heading |
+| `anchor` | Anchor (Settings tab) | Optional `#id` for deep linking |
+
+**Flat variant — CTA fields:**
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| Flat CTA Destination Type | Flat CTA Destination Type | **Page URL** or **Product** |
+| Flat CTA Page URL | Flat CTA Page URL | Link destination |
+| Flat CTA Button Text | Flat CTA Button Text | CTA button label |
+| Flat CTA Button Variant | Flat CTA Button Variant | Button style |
+| Flat CTA Left/Right Icon | Flat CTA Icon | Optional Phosphor icon on the CTA |
+
+### Guidelines
+
+- Use **Categories** when you have 3+ distinct phases or product types with different steps (e.g., Prep / Apply / Finish).
+- Use **Flat** for simpler linear processes — it renders faster and is easier to maintain.
+- The `tagline` should set an optimistic tone: "Simple. 3 Steps." rather than technical language.
+
+---
+
+## Step Section
+
+A sticky, full-page navigation section for complex multi-step guides. Users see a persistent sidebar nav that tracks their progress through major steps. Each step can contain sub-steps with swipeable mobile content and "learn more" expandable links.
+
+This is the most complex widget on the site — plan the content structure before building.
+
+### Fields — Top Level
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `items` | Items | The array of step items — each can be a step or sub-step |
+| `anchor` | Anchor (Settings tab) | Optional `#id` for deep linking |
+| `sectionAriaLabel` | Section Aria Label | Accessible label for the sticky nav (e.g., "Application guide navigation") |
+| `learnMoreLabel` | Learn More Heading | Heading for the expandable "learn more" drawer |
+
+### Fields — Per Step Item
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `itemType` | Item Type | **Step** (top-level) or **Sub-step** (nested under a step) |
+| `stepId` | Step ID | Unique ID for this step — used for navigation anchor links |
+| `heading` | Heading | Step headline — supports rich text |
+| `navigationName` | Navigation Name | Short name shown in the sticky sidebar nav |
+| `parentStepId` | Parent Step ID | For sub-steps — the `stepId` of the parent step |
+| `image` | Image | Step illustration or product photo |
+| `subStepHeading` | Sub-step Heading | Heading shown within the sub-step content panel |
+| `subStepBody` | Sub-step Body | Body copy for the sub-step |
+
+**Learn More links (per step):**
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `icon` | Icon | Icon type for the learn-more link |
+| `iconName` | Icon Name | Phosphor icon name |
+| `label` | Label | Link label text |
+| `link` | Link | Link URL |
+
+### Guidelines
+
+- Each major step needs a unique `stepId` — use slugs like `step-1-prep`, `step-2-apply`, `step-3-finish`.
+- Sub-steps must have their `parentStepId` set to the parent step's `stepId` — this is how nesting works.
+- The `navigationName` should be short (1–3 words) as it appears in the sticky sidebar: "Prep Surface", "Apply Coat", "Let Dry".
+- "Learn More" links are for secondary resources — product safety sheets, tutorial videos, related articles.
+
+### Image Guidelines
+
+- **Recommended size:** 800 × 600 px per step
+- Use consistent image framing across all steps — same angle, same product context
+
+---
+
+## Comparison
+
+A two-column table comparing Rust-Oleum HOME attributes against a competitor. Used on competitive landing pages, buying guide pages, or product feature pages where differentiation is the goal.
+
+### Fields
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `competitorHeaderText` | Competitor Header Text | Name of the competitor shown in the right column header |
+| `rows` | Rows | Array of comparison rows |
+| `anchor` | Anchor (Settings tab) | Optional `#id` for deep linking |
+
+**Per comparison row:**
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `heading` | Heading | The attribute being compared (e.g., "VOC Content", "Dry Time", "Washability") |
+| `rustoleum` | Rust-Oleum | Rust-Oleum HOME's value for this attribute |
+| `competitor` | Competitor | The competitor's value for this attribute |
+
+### Guidelines
+
+- The Rust-Oleum column is always the left (favorable) column by design — structure your rows to highlight genuine advantages.
+- Use consistent value formats across rows (all checkmarks, all text values, or a mix — but be consistent within each row).
+- Recommended: 5–8 comparison rows. Fewer than 4 doesn't justify the table; more than 10 loses reader attention.
+- Keep attribute headings short (2–4 words) and use parallel phrasing across all rows.
+- Avoid mentioning specific competitor brand names unless marketing has approved the comparison.

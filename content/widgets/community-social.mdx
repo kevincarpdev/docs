@@ -1,0 +1,111 @@
+---
+title: "Community & Social"
+description: "User-generated content, social galleries, testimonials, and product reviews."
+---
+
+Community and social widgets pull in real customer voices — from authored testimonials to live social feeds and SiteVibes-powered reviews. They build trust and provide social proof throughout the purchase journey.
+
+---
+
+## UGC
+
+An editorial testimonial section featuring a single quote, attribution, optional avatar, and an embedded social video (YouTube, TikTok, or Instagram). Used for featured customer stories, influencer content, and brand ambassador features.
+
+### Fields
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `subtitle` | Subtitle | Optional label above the quote (e.g., "Customer Story") |
+| `quote` | Quote | The testimonial text — required; supports rich text |
+| `avatar` | Avatar | Optional circular portrait photo of the person |
+| `name` | Name | Full name of the person being quoted — required |
+| `videoView` | Video View | **Landscape** or **Portrait** — choose based on the video's aspect ratio |
+| `videoUrl` | Video URL | URL to a YouTube, TikTok, or Instagram video |
+| `ctaText` | CTA Text | Optional CTA button label (e.g., "Shop this look") |
+| `ctaType` | CTA Type | **Link** or **Anchor** |
+| `ctaTarget` | CTA Target | URL or `#anchor` destination for the CTA |
+| `anchor` | Anchor (Settings tab) | Optional `#id` for deep linking |
+
+### Guidelines
+
+- Use **Portrait** video view for TikTok content; **Landscape** for YouTube.
+- The `name` field should include the person's full name and optionally their title or location (e.g., "Maria R., DIY enthusiast").
+- The CTA is optional — use it only when there's a natural next step tied to the story.
+- If no video is available, leave the `videoUrl` blank — the widget gracefully displays as a quote-only section.
+
+### Image Guidelines — Avatar
+
+- **Recommended size:** 200 × 200 px (square, will be cropped to circle)
+- Use a professional or clear headshot — avoid group photos or low-resolution images
+
+---
+
+## User Post
+
+A community gallery section powered by SiteVibes, showing user-submitted photos filtered by gallery category. Includes social sharing, hashtag promotion, and social network links. Used as the primary community content section.
+
+### Fields — Header
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `heading` | Heading | Section headline |
+| `share_heading` | Share Heading | Heading above the share prompt |
+| `hashtag` | Hashtag | The campaign hashtag displayed to encourage submissions (e.g., `#MyRustoleum`) |
+| `subtitle` | Subtitle | Text displayed after the hashtag (e.g., "to be featured") |
+| `share_button_text` | Share Button Text | Label for the share CTA button |
+| `share_button_url` | Share Button URL | Fallback URL for the share CTA (used if native sharing isn't available) |
+
+### Fields — Gallery Filters (up to 4)
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `gallery1_label` – `gallery4_label` | Label | Display name for this gallery filter tab |
+| `gallery1_id` – `gallery4_id` | SiteVibes Gallery ID | The SiteVibes gallery ID that feeds this filter |
+
+### Fields — Social Links
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `show_social_icons` | Show Social Icons | Toggle social network icons on/off |
+| `facebook_url` | Facebook URL | Link to the brand's Facebook page |
+| `pinterest_url` | Pinterest URL | Link to the brand's Pinterest page |
+| `instagram_url` | Instagram URL | Link to the brand's Instagram profile |
+| `tiktok_url` | TikTok URL | Link to the brand's TikTok profile |
+| `youtube_url` | YouTube URL | Link to the brand's YouTube channel |
+
+### Fields — Legacy Feed Settings
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `limit` | Number of Items | How many items to show in the legacy feed |
+| `order_by` | Sort By | Sort order for the legacy feed |
+| `anchor` | Anchor (Settings tab) | Optional `#id` for deep linking |
+
+### Guidelines
+
+- SiteVibes Gallery IDs are provided by the SiteVibes platform — contact your SiteVibes account manager to get or create gallery IDs.
+- Gallery filter labels should be short (1–2 words): "Kitchens", "Bathrooms", "Outdoors".
+- The hashtag field should not include the `#` character — just the tag text itself. The widget prepends `#` automatically.
+- Only enable social icons if all URL fields are populated with active accounts.
+
+---
+
+## Reviews
+
+A reviews section that pulls product ratings from the SiteVibes API. Displays aggregated review content with a configurable headline. Can show reviews for the page's default product or be overridden to show a different product's reviews.
+
+### Fields
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `headline` | Headline | Section headline — supports rich text (e.g., "What our customers are saying") |
+| `reviewSource` | Review Source | Select how reviews are sourced (platform-configured options) |
+| `overrideProductId` | Override Product | BigCommerce product ID — only set this to override the default page product |
+| `anchor` | Anchor (Settings tab) | Optional `#id` for deep linking |
+
+### Guidelines
+
+- On product detail pages, leave `overrideProductId` blank — the widget auto-detects the page product.
+- On landing pages and promotional pages, set `overrideProductId` to a specific product to surface relevant reviews.
+- The `headline` field supports rich text — use it to add emphasis: **"Real reviews from real customers."**
+- This widget has no standalone content — if SiteVibes doesn't have reviews for the product, the section will be empty or show a "no reviews yet" state.

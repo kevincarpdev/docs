@@ -1,0 +1,97 @@
+---
+title: "Widget Reference"
+description: "Complete reference for all 27 custom Page Builder widgets on the Rust-Oleum HOME BigCommerce storefront."
+---
+
+This reference covers every custom widget available in the Rust-Oleum HOME Page Builder. Each widget is a configurable building block — drag it onto a page, fill in its fields, and publish. No code required.
+
+<Note>
+  All widgets are accessed from the **Page Builder** panel in the BigCommerce admin. Navigate to **Storefront → Page Builder**, open a page, and drag widgets from the left panel onto the canvas.
+</Note>
+
+## Widget Groups
+
+| Group | Widgets | Use When |
+|-------|---------|----------|
+| [Hero & Banners](/content/widgets/hero-banners) | Hero Carousel, Hero, Horizontal Banner, Offer Banner | First section of any page; promotional announcements |
+| [Editorial & Values](/content/widgets/editorial-values) | Image Text, Benefits, Values Block, Environment Block, Quote Image | Building brand trust; explaining product benefits |
+| [Product](/content/widgets/product) | Product Grid, Product Highlights, Product Application, Bundle Offer, Categories | Driving product discovery and purchase decisions |
+| [Gallery & Media](/content/widgets/gallery-media) | Gallery, Before & After, Videos | Showcasing products in use; visual inspiration |
+| [Educational & Process](/content/widgets/educational-process) | How It Works, Step Section, Comparison | Teaching application; supporting purchase confidence |
+| [Community & Social](/content/widgets/community-social) | UGC, User Post, Reviews | Social proof; community engagement |
+| [Blog & Content](/content/widgets/blog-content) | Blog Showcase, Trend Highlight, Newsletter, Title Section | Content marketing; email capture; page structure |
+
+---
+
+## Quick Reference — All Widgets
+
+| Widget | Key Fields | Anchor Support |
+|--------|-----------|----------------|
+| **Hero Carousel** | Slides (badge, headline, image, 2 CTAs per slide) | ✅ |
+| **Hero** | Type (image/video), heading, body, layout variant | ✅ |
+| **Horizontal Banner** | Title, body, CTA with icon, image array | ✅ |
+| **Offer Banner** | Header, subheader, button, right image | ✅ |
+| **Image Text** | Variant (L/R), title, body, image array, CTA | ✅ |
+| **Benefits** | Layout variant (Full/Compact), tagline, headline, items array | ✅ |
+| **Values Block** | 4 value subtitles + descriptions | ❌ |
+| **Environment Block** | Heading, description, 3 feature pills, background image | ❌ |
+| **Quote Image** | Quote, by-line, image | ✅ |
+| **Product Grid** | Variant (Normal/Rich), products array, filters, header | ✅ |
+| **Product Highlights** | Headline, up to 10 product IDs, category filter | ✅ |
+| **Product Application** | Title, body, products used, 5-image gallery | ✅ |
+| **Bundle Offer** | Image, copy, pricing comparison, CTA | ✅ |
+| **Categories** | Tagline, headline, category card array | ✅ |
+| **Gallery** | Variant (Simple/Inspiration), image array + per-image metadata | ✅ |
+| **Before & After** | Section label, up to 5 before/after slide pairs | ❌ |
+| **Videos** | Heading, featured video, paginated video library | ❌ |
+| **How It Works** | Variant (Categories/Flat), steps, CTA | ✅ |
+| **Step Section** | Sticky step nav, steps + sub-steps, learn-more links | ✅ |
+| **Comparison** | Competitor name, comparison rows (heading, RO value, competitor value) | ✅ |
+| **UGC** | Quote, name, avatar, video URL, CTA | ✅ |
+| **User Post** | Heading, hashtag, SiteVibes gallery filters, social links | ✅ |
+| **Reviews** | Headline, review source, optional product override | ✅ |
+| **Blog Showcase** | Variant (Curated/Hub), article IDs, search/filter config | ✅ |
+| **Trend Highlight** | Callout, trend array (title, body, images) | ✅ |
+| **Newsletter** | Heading, body, image, button text | ✅ |
+| **Title Section** | Heading, body, subtitle, CTA or coupon code | ✅ |
+
+---
+
+## Common Fields Across All Widgets
+
+### Anchor
+
+Every widget that supports deep linking has an **Anchor** field in its **Settings** tab. When filled in, it adds a page anchor (`id` attribute) to the widget's outermost element.
+
+- **Format:** Use lowercase slugs — `paint-colors`, `how-it-works`, `shop-now`
+- **Usage:** Link to a specific section using `#anchor` in a button URL elsewhere on the page
+- **Example:** Set anchor to `get-started`, then link a hero CTA to `#get-started`
+
+### Product IDs
+
+Any field labelled **Product**, **Product Selector**, or **Override Product** expects a **BigCommerce product ID** (a number, not a product name or SKU).
+
+To find a product ID:
+1. Go to **Products** in the BigCommerce admin
+2. Open the product
+3. Check the URL — it ends in `/products/{ID}/edit`
+
+### Rich Text Fields
+
+Fields labelled as `text` type (vs. `input`) support basic rich text: **bold**, *italic*, links, and line breaks. Use sparingly — over-formatting diminishes visual hierarchy.
+
+---
+
+## Image Best Practices
+
+| Use Case | Recommended Size | Format |
+|----------|-----------------|--------|
+| Hero / full-width background | 1440 × 700 px | JPG, WebP |
+| Standard section image | 800 × 600 px | JPG, WebP |
+| Square product / gallery | 800 × 800 px | JPG, WebP |
+| Avatar / portrait | 200 × 200 px | JPG, PNG |
+| Icon | 64 × 64 px | SVG, PNG |
+
+- Always compress images before uploading — target under 300 KB for photos.
+- Use WebP format when possible for better performance.
+- Name image files descriptively before uploading: `kitchen-painted-walls-sage-green.jpg`, not `IMG_4823.jpg`.

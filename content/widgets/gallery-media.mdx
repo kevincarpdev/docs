@@ -1,0 +1,138 @@
+---
+title: "Gallery & Media"
+description: "Photo galleries, before-and-after comparisons, and video libraries."
+---
+
+Gallery and media widgets are visually rich sections that showcase products in use, transformations, and instructional video content. Image quality has the highest impact here — invest in polished assets.
+
+---
+
+## Gallery
+
+A dual-variant gallery: **Simple** (a clean paginated image sequence) and **Inspiration** (a full editorial layout with section navigation, category filters, captions, article links, product links, and a preview area). Used for inspiration hubs, project showcases, and lifestyle editorial pages.
+
+### Fields — Shared
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `layoutVariant` | Layout | **Simple** or **Inspiration** |
+| `showNavigationArrows` | Navigation Arrows | **Disabled**, **Top**, or **Bottom** |
+| `showDotIndicators` | Dot Indicators | **Disabled**, **Top**, or **Bottom** |
+| `showImageGutter` | Image Gutter | Show spacing between images |
+| `showImageCaptions` | Image Captions | Show caption text below images |
+| `showPreviewArea` | Preview Area | Show the preview strip (Inspiration only) |
+| `subtitle` | Subtitle | Section sub-label |
+| `heading` | Heading | Section headline — supports rich text |
+| `body` | Body | Supporting copy |
+| `anchor` | Anchor (Settings tab) | Optional `#id` for deep linking |
+
+### Fields — Per Image (Inspiration variant)
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `sectionNames` | Section Names | Navigation section this image belongs to |
+| `categoryNames` | Category Names | Filter category tags |
+| `caption` | Caption | Image caption text |
+| `hasArticle` | Has Article Link | Toggle to add a "Read article" link |
+| `articleLink` | Article Link | URL to the related article |
+| `articleText` | Article Text | Link label |
+| `hasProduct` | Has Product | Toggle to add a product link |
+| `product` | Product | BigCommerce product ID |
+| `hasLinkAlternative` | Has Link Alternative | Toggle for a custom link instead of product |
+| `linkTitle` | Link Title | Custom link label |
+| `linkImage` | Link Image | Optional thumbnail for the link |
+| `linkUrl` | Link URL | Custom link destination |
+
+### Guidelines
+
+- Use **Simple** for product detail pages and straightforward photo sequences.
+- Use **Inspiration** for the main inspiration hub — it requires significantly more content per image (sections, categories, captions, links).
+- For the Inspiration variant, plan your section names and category structure before adding images — they drive the navigation and filter UI.
+
+### Image Guidelines
+
+- **Recommended size:** 1200 × 900 px (landscape) or 900 × 1200 px (portrait)
+- All images in a gallery should be the same orientation for a consistent scroll experience
+
+---
+
+## Before & After
+
+A split-image comparison carousel showing up to 5 before/after pairs. Each slide has its own before image, after image, and optional headline and description. Used on product pages, DIY project showcases, and transformation stories.
+
+### Fields
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `sectionLabel` | Section Label | Small label above the section headline (e.g., "Transformations") |
+| `sectionHeadline` | Section Headline | Overall section heading — supports rich text |
+
+**Per slide (1–5):**
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| Before Image | Before Image | The "before" state photo |
+| After Image | After Image | The "after" state photo |
+| Headline | Headline (optional) | Per-slide headline to describe the transformation |
+| Description | Description (optional) | Short copy explaining the before/after context |
+
+### Guidelines
+
+- Both before and after images must be the same crop/composition — mismatched framing breaks the comparison effect.
+- Add at least 2 slides to justify the carousel; a single slide should use the `Image Text` widget instead.
+- Per-slide headlines and descriptions are optional — use them when different slides show different products or techniques.
+
+### Image Guidelines
+
+- **Recommended size:** 800 × 600 px (landscape, consistent for both before and after)
+- Shoot both images from the same angle, distance, and lighting conditions
+- Avoid resizing or cropping before/after pairs differently
+
+---
+
+## Videos
+
+A full-featured video library section with search, category filtering, featured video playback, and paginated video cards. Content metadata can be overridden per-video. Used for how-to, product demo, and DIY tutorial hubs.
+
+### Fields — Library Settings
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `heading` | Heading | Library section headline |
+| `subheading` | Subheading | Supporting copy beneath the heading |
+| `searchPlaceholder` | Search Placeholder | Placeholder text in the search input |
+| `defaultSearchPlaceholder` | Default Search Placeholder | Fallback search placeholder |
+| `defaultCtaLabel` | Default CTA Label | Default button label on video cards |
+| `bylinePrefix` | Byline Prefix | Text before the video date/author (e.g., "Posted by") |
+| `noMatchMessage` | No Results Message | Message shown when search returns no results |
+| `noAdditionalMatchMessage` | No Additional Results | Message when pagination has no more results |
+| `videoUnavailableMessage` | Video Unavailable | Message shown when a video can't load |
+| `paginationCount` | Videos Per Page | Number of video cards shown per page |
+| `featuredCategoriesCsv` | Featured Categories | Comma-separated list of categories to feature in the filter bar |
+| `featuredBadge` | Featured Badge | Badge label on the featured video (e.g., "Featured") |
+
+### Fields — Featured Video
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `featuredVideoUrl` | Featured Video URL | Direct URL to the featured video |
+| `featuredCustomizeContent` | Customize Featured Content | Toggle to override the default video metadata |
+| `featuredHeading` | Featured Heading | Custom title for the featured video |
+| `featuredDescription` | Featured Description | Custom description for the featured video |
+| `featuredCustomizeCta` | Customize Featured CTA | Toggle to override the featured video CTA |
+
+### Fields — Video Array (per video)
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `videoUrl` | Video URL | Direct URL to the video |
+| `categoriesCsv` | Categories | Comma-separated category tags for this video |
+| `customizeContent` | Customize Content | Toggle to override this video's metadata |
+| `heading` | Heading | Custom title override for this video |
+| `description` | Description | Custom description override |
+
+### Guidelines
+
+- The `featuredVideoUrl` should be the most important or newest video — it plays prominently at the top.
+- Category CSVs should be consistent across all videos (e.g., `How-To,DIY,Products`) — inconsistent casing or spelling breaks filters.
+- Use `customizeContent` overrides sparingly — only when the source video's metadata doesn't match the site's tone or SEO requirements.

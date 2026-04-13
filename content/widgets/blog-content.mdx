@@ -1,0 +1,154 @@
+---
+title: "Blog & Content"
+description: "Blog showcases, trend highlights, newsletter signups, and page title sections."
+---
+
+These widgets support the site's content marketing layer — surfacing articles, editorial trends, and email capture. They appear on blog hubs, campaign pages, and as recurring modules in page templates.
+
+---
+
+## Blog Showcase
+
+A multi-layout article section that can display curated posts (4-up grid or rail) or power a full **Hub** layout with search, tag filters, a featured weekly read, and pagination. Used on the main blog page and article category hubs.
+
+### Fields — Layout & Settings
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `layoutVariant` | Layout Variant | **Curated (4 posts, rail)** — manual curation, or **Hub** — full browsable layout |
+| `anchor` | Anchor (Settings tab) | Optional `#id` for deep linking |
+
+### Fields — Header (both variants)
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `headline` | Section Title | Section headline |
+| `subheading` | Description | Supporting copy beneath the headline |
+| `buttonText` | Button Text | "See all" or similar CTA label |
+| `buttonUrl` | Button URL | Link to the full blog index |
+
+### Fields — Curated Posts
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `blog1_id`–`blog4_id` | Blog Post ID (Slot 1–4) | BigCommerce blog post IDs for each curated slot |
+| `badgeText` | Featured Badge Text | Text for the badge on the first (featured) post |
+
+### Fields — Hub Layout
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `searchPlaceholder` | Search Placeholder | Placeholder text in the hub search bar |
+| `weeklyReadLabel` | Featured Badge Label | Label for the weekly read badge |
+| `supportUrl` | Support URL | URL for the support callout card |
+| `supportTitle` | Support Title | Title for the support card |
+| `supportDescription` | Support Description | Short description in the support card |
+| `articles` | Hub Articles | Array of articles for the hub — each item takes a `Blog post ID` |
+
+### Guidelines
+
+- **Curated variant:** Use the `badgeText` to mark the first post as "Featured" or "Editor's Pick."
+- **Hub variant:** The search and filter UI is auto-generated from post metadata — no additional configuration needed beyond adding articles.
+- BigCommerce blog post IDs can be found in the admin under **Storefront → Blog** — hover the post title to see its ID in the URL.
+- For the curated variant, 4 posts is the fixed count — all 4 slots must be filled.
+
+---
+
+## Trend Highlight
+
+An editorial section featuring a top-level callout, optional heading and body, and a repeatable array of **Trends** — each with its own copy and up to 5 paginated images. Used to showcase seasonal color trends, design styles, and project themes.
+
+### Fields — Section Copy (optional)
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `callout` | Callout | Short attention-grabbing label (e.g., "Trending Now") |
+| `title` | Title | Section headline |
+| `body` | Body | Supporting copy |
+| `anchor` | Anchor (Settings tab) | Optional `#id` for deep linking |
+
+### Fields — Per Trend (array)
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `title` | Title | Trend name (e.g., "Warm Neutrals", "Coastal Blue") |
+| `body` | Body | Short description of the trend |
+| `image1`–`image5` | Image 1–5 | Product or lifestyle photos for this trend (Image 1 required; 2–5 optional) |
+
+### Guidelines
+
+- Use 3–6 trends for a balanced section — too few feels sparse; too many requires significant scroll.
+- Each trend's `title` should be evocative and short (2–3 words): "Earthy Warmth," "Deep Forest," "Clean White."
+- Add 3–5 images per trend — they paginate within the trend card, so variety adds visual depth.
+- The section callout, title, and body are all optional — the widget renders cleanly with trend cards alone.
+
+### Image Guidelines
+
+- **Recommended size:** 800 × 800 px (square) per trend image
+- Images within a trend should show the same color palette or style for visual coherence
+
+---
+
+## Newsletter
+
+A full-width email signup band with a heading, body copy, optional image, and a submit button. Connects to the site's email platform. Used at the bottom of editorial pages, category pages, and campaign landing pages.
+
+### Fields
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `heading` | Heading | Newsletter section headline (e.g., "Stay inspired") |
+| `body` | Body | Supporting copy — keep it brief; explain the value of subscribing |
+| `image` | Image | Optional image displayed alongside the signup form |
+| `buttonText` | Button Text | Submit button label (e.g., "Subscribe", "Get updates") |
+| `anchor` | Anchor (Settings tab) | Optional `#id` for deep linking |
+
+### Guidelines
+
+- The headline and body should communicate the subscriber benefit, not just "sign up for our newsletter."
+- Keep the body copy under 25 words — the form itself is the focus.
+- The image is optional — when used, choose lifestyle photography that reinforces the brand.
+- The button label should be action-forward: "Get Inspired", "Subscribe Free", "Join the Community."
+
+### Image Guidelines
+
+- **Recommended size:** 600 × 400 px (landscape) or 400 × 600 px (portrait)
+
+---
+
+## Title Section
+
+A flexible page title and introductory copy section with optional subtitle, coupon/discount label, and CTA. Used at the top of category pages, campaign pages, and any page that needs a structured header below the hero.
+
+### Fields
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `heading` | Heading | Primary page or section title — supports rich text |
+| `body` | Body | Supporting copy beneath the heading — supports rich text |
+| `subtitle` | Subtitle | Optional small label above the heading |
+| `variant` | Variant | Controls the visual style/layout of the title section |
+| `ctaType` | Type | Select the CTA type: **Button** or **Coupon** |
+| `anchor` | Anchor (Settings tab) | Optional `#id` for deep linking |
+
+**When CTA Type = Button:**
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `buttonText` | Button Text | CTA button label |
+| `url` | URL | CTA destination |
+
+**When CTA Type = Coupon:**
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `couponCopy` | Coupon Copy | The coupon or promo code to display (e.g., `SAVE20`) |
+| `couponCopyActionLabel` | Coupon Button Label | Label for the copy-to-clipboard button (e.g., "Copy code") |
+| `couponCopiedActionLabel` | Coupon Copied Label | Confirmation label after copying (e.g., "Copied\!") |
+
+### Guidelines
+
+- Use **Subtitle** to add a small category label or campaign tag above the main heading (e.g., "Spring Collection").
+- **Coupon** type is for promotional pages where a discount code needs to be prominently displayed and easily copied.
+- For most pages, `ctaType` should be **Button** — the coupon option is specifically for promo campaigns.
+- Keep the heading under 70 characters for clean rendering at all breakpoints.

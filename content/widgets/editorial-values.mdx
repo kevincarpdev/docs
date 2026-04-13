@@ -1,0 +1,152 @@
+---
+title: "Editorial & Values"
+description: "Image-text layouts, brand value propositions, environmental messaging, and pull quotes."
+---
+
+These widgets deliver editorial content — combining images with copy to explain product benefits, brand values, and differentiated features. They sit between transactional sections to build brand trust.
+
+---
+
+## Image Text
+
+A two-column section pairing one or more images (left or right) with a block of copy, an optional subheading, and an optional CTA. The most versatile editorial widget on the site.
+
+### Fields
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `variant` | Variant | **Images Left** or **Images Right** — controls which side the image column appears |
+| `subheading` | Subheading | Optional small label above the title (e.g., "Why it works") |
+| `title` | Title | Section headline |
+| `body` | Body | Main copy block — plain text, no HTML |
+| `images` | Images | Array of images that paginate within the image column (add 1–3) |
+| CTA fields | CTA | Optional button: Destination Type, Page URL/Product, Left Icon, Right Icon, Button Text, Variant |
+| `anchor` | Anchor (Settings tab) | Optional `#id` for deep linking |
+
+### Guidelines
+
+- Alternate **Images Left / Images Right** when stacking multiple Image Text sections to create visual rhythm.
+- Add 2–3 images to enable pagination — editors can show before/after or product shots from multiple angles.
+- The `body` field is plain text; use short paragraphs and line breaks for readability.
+- Use the CTA only when there's a clear next step; omit it for pure informational sections.
+
+### Image Guidelines
+
+- **Recommended size:** 800 × 600 px (landscape) or 600 × 800 px (portrait)
+- Crop images consistently across the array so pagination looks intentional
+
+---
+
+## Benefits
+
+An icon-driven benefits section with a tagline, headline, and a repeatable list of benefit cards. Supports **Full** (large card) and **Compact** (tight grid) layout variants.
+
+### Fields
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `layoutVariant` | Layout Variant | **Full** — large prominent cards, or **Compact** — tighter icon list |
+| `tagline` | Tagline | Small label above the headline |
+| `headline` | Headline | Section headline — supports rich text |
+| `anchor` | Anchor (Settings tab) | Optional `#id` for deep linking |
+
+**Per benefit card (array):**
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| Icon | Icon | Upload a custom icon image |
+| Icon Name | Icon Name | Phosphor icon name if using the icon library |
+| Title | Title | Benefit title (short — 3–5 words) |
+| Description | Description | One-sentence explanation of the benefit |
+
+### Guidelines
+
+- Use **Full** variant when benefits are the main page focus (e.g., product feature pages).
+- Use **Compact** for secondary callouts beneath a hero.
+- Aim for 3–6 benefit cards — fewer than 3 looks sparse; more than 6 causes cognitive overload.
+- Icons should be visually consistent — use either all custom images or all Phosphor icons, not both.
+
+---
+
+## Values Block
+
+A four-up section displaying brand value propositions. Each value has a subtitle and a description. No images — pure typographic emphasis.
+
+### Fields
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `value1_subtitle` | Value 1 Subtitle | Short headline for value 1 (e.g., "Low-VOC Formula") |
+| `value1_description` | Value 1 Description | One-sentence expansion of the value |
+| `value2_subtitle` | Value 2 Subtitle | Short headline for value 2 |
+| `value2_description` | Value 2 Description | One-sentence expansion |
+| `value3_subtitle` | Value 3 Subtitle | Short headline for value 3 |
+| `value3_description` | Value 3 Description | One-sentence expansion |
+| `value4_subtitle` | Value 4 Subtitle | Short headline for value 4 |
+| `value4_description` | Value 4 Description | One-sentence expansion |
+
+### Guidelines
+
+- All four values display at equal weight — they should be equally significant.
+- Keep subtitles to 4 words or fewer; descriptions to one sentence.
+- This widget has no anchor or CTA — it is purely informational.
+
+---
+
+## Environment Block
+
+A full-width hero-style section with a background image, heading, supporting description, and three feature pills — used to communicate eco-friendly or environmental product attributes.
+
+### Fields
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `heading` | Heading | Section headline — supports rich text |
+| `description` | Description | Supporting copy beneath the heading |
+| `feature1_icon` | Feature 1 — Phosphor Icon Name | Icon name for the first feature pill |
+| `feature1_title` | Feature 1 — Title | Short title for the first pill |
+| `feature1_description` | Feature 1 — Description | One-line descriptor in the pill |
+| `feature2_icon` | Feature 2 — Phosphor Icon Name | Icon for second pill |
+| `feature2_title` | Feature 2 — Title | Title for second pill |
+| `feature2_description` | Feature 2 — Description | Descriptor for second pill |
+| `feature3_icon` | Feature 3 — Phosphor Icon Name | Icon for third pill |
+| `feature3_title` | Feature 3 — Title | Title for third pill |
+| `feature3_description` | Feature 3 — Description | Descriptor for third pill |
+| `background_image` | Background Image | Full-bleed background image for the section |
+
+### Guidelines
+
+- The background image should be dark or muted enough that white text overlays remain readable.
+- Feature pill descriptions should be very short — 4–6 words max (e.g., "Zero harsh chemicals").
+- Use Phosphor icon names that relate to the environmental claim (e.g., `leaf`, `plant`, `recycle`).
+
+### Image Guidelines
+
+- **Recommended size:** 1440 × 600 px minimum
+- Avoid images with busy backgrounds in the center — the copy and pills overlay the center portion
+
+---
+
+## Quote Image
+
+An image-forward pull-quote section with a single quote, optional attribution by-line, and a full-bleed image. Used to highlight customer testimonials or brand statements.
+
+### Fields
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `quote` | Quote | The pull-quote text — supports rich text |
+| `byLine` | By-line | Optional attribution line (e.g., "— Sarah M., Verified Customer") |
+| `image` | Image | Background or side image |
+| `anchor` | Anchor (Settings tab) | Optional `#id` for deep linking |
+
+### Guidelines
+
+- Quotes should be genuine customer language — authentic phrasing outperforms polished marketing copy.
+- Keep the quote under 50 words for strong visual impact.
+- The by-line is optional; only include it if attribution is verifiable.
+
+### Image Guidelines
+
+- **Recommended size:** 1440 × 700 px (landscape for full-bleed)
+- Choose images where the subject is positioned to one side, leaving room for quote overlay

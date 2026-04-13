@@ -1,0 +1,167 @@
+---
+title: "Product Widgets"
+description: "Product grids, highlights, bundle offers, application examples, and category navigation."
+---
+
+Product widgets connect editorial content to the store catalog. They pull live product data from BigCommerce using product IDs, so keeping product IDs accurate is critical.
+
+<Note>
+  All `productId` fields require the **BigCommerce product ID** — a number found in the store admin under **Products → [Product] → URL** or via the catalog export.
+</Note>
+
+---
+
+## Product Grid
+
+A configurable product listing grid. Supports a **Normal** variant (clean cards) and a **Rich** variant (cards with editorial gallery images). Used on category pages, collection pages, and curated landing sections.
+
+### Fields
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `variant` | Variant | **Normal** — standard product cards, or **Rich** — cards with editorial image overlays |
+| `rows` | Rows | Number of product rows to display |
+| `mobileBehavior` | Mobile Behavior | How the grid stacks or scrolls on mobile |
+| `enableFilters` | Enable Filters | Show/hide the category filter bar above the grid |
+| `enableHeader` | Enable Header | Show/hide the heading, subheading, and body copy |
+| `heading` | Heading | Section headline (shown when Enable Header is on) |
+| `subheading` | Subheading | Supporting copy beneath the heading |
+| `body` | Body | Additional copy block |
+| `enableCta` | Enable CTA | Show/hide the CTA button below the grid |
+| `ctaText` | CTA Button Text | Label for the "See all" or similar CTA |
+| `products` | Products | Array of product items — add one `Product Selector` per product |
+| `anchor` | Anchor (Settings tab) | Optional `#id` for deep linking |
+
+**Rich variant only (per product):**
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `richImage1`–`richImage6` | Rich Gallery Image 1–6 | Editorial images overlaid on product cards in the Rich variant |
+
+### Guidelines
+
+- For curated grids, add 4–12 products for a balanced layout at common viewport widths.
+- The **Rich** variant is intended for trend or editorial contexts — pair it with lifestyle imagery that matches the product's use case.
+- Enable Filters only when the grid contains 8+ products from multiple categories.
+
+---
+
+## Product Highlights
+
+A featured product strip with up to 10 curated product IDs, an optional heading with CTA, and an optional category filter. Best used for "Best Sellers," "New Arrivals," or curated collection callouts.
+
+### Fields
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `headline` | Headline | Section heading — supports rich text |
+| `buttonText` | Button Text | Optional "Shop All" or similar CTA label |
+| `buttonUrl` | Button URL | Destination for the CTA button |
+| `product1`–`product10` | Product 1–10 | Product IDs for each featured product (leave extras blank) |
+| `showCategoryFilter` | Show Category Filter | Enable a filter bar above the products |
+| `anchor` | Anchor (Settings tab) | Optional `#id` for deep linking |
+
+### Guidelines
+
+- 4–8 products is the visual sweet spot — use 4 for a tight feature, 6–8 for a broader showcase.
+- Add the `buttonUrl` when you want to send visitors to a full category page after the highlight.
+- Enable the category filter only when products span distinct categories.
+
+---
+
+## Product Application
+
+An editorial section showing how a product is applied in context — combines copy, linked products, variant SKU attribution, and a sequenced photo gallery up to 5 images. Used on product detail pages and how-to sections.
+
+### Fields
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `subtitle` | Subtitle | Small label above the title (e.g., "Step by Step") |
+| `title` | Title | Section headline — supports rich text |
+| `body` | Body | Main descriptive copy about the application |
+| `productsUsed` | Products Used | Array of products — add one product entry per item used |
+| `productId` | Product (per item) | BigCommerce product ID of the product used |
+| `variantSku` | Variant SKU | Optional SKU to highlight a specific variant |
+| `image1`–`image5` | Image 1–5 | Sequenced gallery images (1 is required; 2–5 optional) |
+| `nextImageLabel` | Next Image Preview Button Label | Accessible label for the forward pagination button |
+| `previousImageLabel` | Previous Image Button Label | Accessible label for the back pagination button |
+| `anchor` | Anchor (Settings tab) | Optional `#id` for deep linking |
+
+### Guidelines
+
+- Use 3–5 images to tell a before/during/after story for the application.
+- The `Products Used` array should list every product a customer would need — this drives cross-sell exposure.
+- Set the `variantSku` only if you're highlighting a specific color or finish, not the base product.
+- Customize the Next/Previous Image labels to match the content context (e.g., "View next step" vs. "Next photo").
+
+### Image Guidelines
+
+- **Recommended size:** 800 × 800 px (square) for consistent gallery display
+- Images should show the product in use at the same scale and angle for continuity
+
+---
+
+## Bundle Offer
+
+A promotional widget pairing a product image with a copy block, CTA, and a pricing comparison (traditional vs. offer price). Used for bundle deals, sale callouts, and multi-product promotions.
+
+### Fields
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `image` | Image | Product or bundle image |
+| `title` | Title | Offer headline |
+| `body` | Body | Supporting description of the offer |
+| `ctaText` | CTA Text | Button label |
+| `ctaDestinationType` | CTA Destination Type | **Relative URL** or **Product** |
+| `ctaRelativeUrl` | Relative URL | Destination path if linking to a page |
+| `ctaProduct` | Product | Product ID if the CTA adds to cart |
+| `traditionalCopy` | Traditional Copy | Label for the original price (e.g., "Regular price") |
+| `traditionalPrice` | Traditional Price | Original price value (e.g., "$49.99") |
+| `offerCopy` | Offer Copy | Label for the discounted price (e.g., "Bundle price") |
+| `offerPrice` | Offer Price | Offer price value (e.g., "$34.99") |
+| `savingsCopy` | Savings Copy | Savings messaging (e.g., "Save $15 when you bundle") |
+| `anchor` | Anchor (Settings tab) | Optional `#id` for deep linking |
+
+### Guidelines
+
+- Always fill in all three pricing fields (`traditional`, `offer`, `savings`) together — partial pricing copy looks broken.
+- Use a product image that shows all items in the bundle together, not just one.
+- Point the CTA at a custom bundle product ID or a landing page — avoid linking to a single product page.
+
+### Image Guidelines
+
+- **Recommended size:** 800 × 800 px (square) for visual balance with the copy column
+
+---
+
+## Categories
+
+A card-based navigation section that lets visitors browse top-level product categories. Each card links to a category page, product, or URL with optional left/right icon decorators on the button.
+
+### Fields
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| `tagline` | Tagline | Small label above the section headline |
+| `headline` | Headline | Section heading — supports rich text |
+| `anchor` | Anchor (Settings tab) | Optional `#id` for deep linking |
+
+**Per category card:**
+
+| Field | Label in UI | Description |
+|-------|-------------|-------------|
+| Destination Type | Destination Type | **Page URL**, **Product**, or **Hash Tag** |
+| Page URL | Page URL | Link destination if type is Page URL |
+| Left Icon | Left Icon | Optional Phosphor icon to the left of the button text |
+| Custom Left Icon Name | Custom Left Icon Name | Icon name if using a custom icon |
+| Right Icon | Right Icon | Optional Phosphor icon to the right of the button text |
+| Button Text | Button Text | The category card button label |
+| Button Variant | Button Variant | Styling variant for the card button |
+
+### Guidelines
+
+- 4–8 category cards work best for balanced grid layouts.
+- Destination Type should be **Page URL** for category pages — use the relative path (e.g., `/paint/`).
+- Button text should match the category name exactly as it appears in navigation for consistency.
