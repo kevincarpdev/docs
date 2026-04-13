@@ -53,6 +53,12 @@
         "tab": "Content Entry Guide",
         "groups": [
           {
+            "group": "Admin Guide",
+            "pages": [
+              "content/admin-guide"
+            ]
+          },
+          {
             "group": "Getting Started",
             "pages": [
               "content/index",

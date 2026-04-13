@@ -1,0 +1,246 @@
+---
+title: "Admin Guide"
+description: "How to manage products, promotions, and access Page Builder in the BigCommerce admin."
+---
+
+The BigCommerce admin is where all store management happens — products, pricing, promotions, and the visual page editor. This guide walks through the four tasks you'll use most as a content editor or marketer.
+
+**Admin URL:** [store-sbgtonpvot.mybigcommerce.com/manage](https://store-sbgtonpvot.mybigcommerce.com/manage/dashboard)
+
+The left navigation is your main way around. The sections you'll use most:
+
+| Section | What it's for |
+|---|---|
+| **Products** | Add, edit, and manage product listings |
+| **Marketing** | Banners and promotional codes |
+| **Storefront** | Theme settings |
+| **Channels** | Access Page Builder to edit page layouts |
+
+---
+
+## Adding a Product
+
+<Note>
+  You'll typically only add products when a new SKU is launching. Most updates (price, description, images) are edits to existing products.
+</Note>
+
+**To add a new product:**
+
+1. In the left nav, click **Products** → **Add**
+2. You'll land on the **Add product** form. The left sidebar shows all sections — fill them in order from top to bottom.
+
+### Basic Information
+
+This is the first section visible when the form loads.
+
+| Field | What to enter |
+|---|---|
+| **Product Name** | Full product name as it should appear on the storefront (e.g. "Rust-Oleum HOME Countertop Coating Kit") |
+| **SKU** | The product's SKU code (e.g. "384962S") — required |
+| **Product Type** | Leave as **Physical** for all RO HOME products |
+| **Default Price** | Price excluding tax |
+| **Brand** | Select **Rust-Oleum Home** from the dropdown |
+| **Weight** | Enter in ounces — required for shipping calculations |
+| **Visible on Storefront** | Check this box to make the product visible. Uncheck to hide it. |
+
+### Categories
+
+Click **Categories** in the left sidebar to jump to this section.
+
+1. Check the boxes for all applicable categories (e.g. "Shop All", "Floor Coatings")
+2. A product can belong to multiple categories
+
+### Description
+
+Click **Description** in the sidebar.
+
+1. The description editor works like a simple word processor
+2. Write the product description here — this is what appears on the product detail page
+3. You can paste formatted text or write in plain text. Bold, italic, and bullet lists are supported.
+
+### Images
+
+Click **Images** in the sidebar.
+
+1. Click **Upload images** or drag and drop image files
+2. The first image uploaded becomes the main product image
+3. Drag images to reorder them — the top image is the primary
+4. Recommended: upload at least 3 images (front, side, lifestyle)
+5. Minimum size: 800×800px. Preferred: 1200×1200px or larger.
+
+<Note>
+  Image specs and naming conventions are covered in detail in the [Product Images](/content/product-images) section.
+</Note>
+
+### Pricing
+
+Click **Pricing** in the sidebar to set sale pricing, cost price, and MSRP separately from the default price.
+
+### Inventory
+
+Click **Inventory** to set stock tracking options. For most RO HOME products, inventory is managed externally — leave tracking off unless instructed otherwise.
+
+### Saving and Assigning to Channels
+
+When all sections are filled:
+
+1. Click **Save** (bottom right)
+2. After saving, click **Assign to channels** at the top of the page
+3. Select **Rust-Oleum Home** channel to make the product available on the storefront
+4. Save the channel assignment
+
+<Note>
+  A product that isn't assigned to a channel won't appear on the storefront even if "Visible on Storefront" is checked.
+</Note>
+
+---
+
+## Editing an Existing Product
+
+**To edit a product:**
+
+1. Click **Products** → **All products** in the left nav
+2. The product list shows all products with SKU, price, and visibility status
+3. Use the search bar at the top to find a specific product by name or SKU
+4. Click the product name to open the edit form
+5. Make your changes in the relevant section (use the left sidebar to navigate)
+6. Click **Save** when done
+
+**Enabling / Disabling a product:**
+
+- In the product list, look at the **Visibility** column — it shows ENABLED or DISABLED
+- To toggle: open the product, scroll to Basic Information, and check/uncheck **Visible on Storefront**, then Save
+- Or: from the product list, click the **⋯** (three dots) menu on the right to quickly enable/disable without opening the full edit form
+
+---
+
+## Promotion Banners
+
+Promotion banners are sitewide or page-specific announcement bars — use them to call out sales, seasonal offers, or shipping promotions.
+
+**To add a banner:**
+
+1. In the left nav, click **Marketing** → **Banners**
+2. Click **Create a Banner** (top right)
+
+Fill in the banner form:
+
+| Field | What to enter |
+|---|---|
+| **Banner Name** | Internal name only — shoppers don't see this (e.g. "Spring Sale — April 2026") |
+| **Banner Content** | The message shoppers see. Keep it short: "Save 20% sitewide — use code SPRING20" |
+| **Show on Page** | Choose where the banner appears: Home Page, Category Pages, Brand Pages, or Search Results |
+| **Location** | **Top of Page** (recommended) or Bottom of Page |
+| **Date Type** | **Date Range** to schedule, or **Always show** to run indefinitely |
+| **Start Date / End Date** | Set these if using Date Range |
+| **Status** | Set to **Active** to show the banner. **Inactive** hides it. |
+
+3. Click **Save**
+
+<Note>
+  You can run multiple banners at once. They stack on the pages you've selected. Deactivate a banner when a promotion ends rather than deleting it — it's useful to keep a record.
+</Note>
+
+**To edit or deactivate a banner:**
+
+1. Go to **Marketing** → **Banners**
+2. Click the banner name to edit it, or use the toggle in the list to quickly change its status
+
+---
+
+## Promo Codes
+
+Promo codes are discount codes shoppers enter at checkout. BigCommerce calls these **Promotions**.
+
+**To create a promo code:**
+
+1. In the left nav, click **Marketing** → **Promotions**
+2. Click **Create** (top right)
+3. Choose the promotion type:
+
+| Type | When to use |
+|---|---|
+| **Percentage off order** | "20% off your order" |
+| **Fixed amount off order** | "$10 off orders over $50" |
+| **Free shipping** | Waive shipping charges |
+| **Percentage off products** | Discount specific products or categories |
+| **Buy X Get Y** | Bundle or gift-with-purchase offers |
+
+4. Fill in the promotion details:
+
+**Promotion Info**
+- **Name**: Internal label (e.g. "Spring 20% Off — April 2026")
+- **Status**: Active or Inactive
+
+**Discount**
+- Set the discount amount or percentage
+
+**Conditions** *(optional)*
+- Minimum order amount required to use the code
+- Restrict to specific products or categories
+
+**Coupon Code**
+- Enable **Allow coupon code**
+- Enter the code customers will use (e.g. `SPRING20`). Use all caps, no spaces.
+- Set **Max uses** to limit how many times it can be used total
+- Set **Max uses per customer** to limit per-person usage (usually 1)
+
+**Dates**
+- Set **Start date** and **End date** to automatically activate/deactivate the promotion
+
+5. Click **Save**
+
+<Note>
+  Test every promo code in the storefront before announcing it. Add a product to your cart and enter the code at checkout to verify the discount applies correctly.
+</Note>
+
+**To deactivate a promo code:**
+
+1. Go to **Marketing** → **Promotions**
+2. Find the promotion and click the **⋯** menu → **Deactivate**
+3. Or open the promotion and set Status to **Inactive**
+
+---
+
+## Accessing Page Builder
+
+Page Builder is where you edit the visual layout of pages — the homepage, landing pages, and any custom page. It lives inside **Channels** in the BigCommerce admin.
+
+**To open Page Builder:**
+
+1. In the left nav, click **Channels**
+2. You'll see the **Rust-Oleum Home** channel listed
+3. Click the **⋯** (three dots) menu next to the channel name
+4. Select **Edit Theme** — this opens Page Builder
+
+**Alternative path:**
+1. In the left nav, click **Storefront** → **Themes**
+2. Find the active theme (marked "Active")
+3. Click **Customize** — this also opens Page Builder
+
+Once inside Page Builder:
+
+- The **left panel** shows a list of pages you can edit
+- Click any page to load it in the preview
+- Click **+** in a region to add a widget
+- Click any existing widget to open its settings on the right
+- Changes save automatically as you work
+- Click **Publish** (top right) to push changes live
+
+<Note>
+  See [Page Builder Basics](/content/page-builder-basics) and [Editing Widgets](/content/editing-widgets) for full step-by-step instructions on working inside Page Builder.
+</Note>
+
+---
+
+## Quick Reference
+
+| Task | Path |
+|---|---|
+| View all products | Products → All products |
+| Add a new product | Products → Add |
+| Create a sale banner | Marketing → Banners → Create a Banner |
+| Create a promo code | Marketing → Promotions → Create |
+| Open Page Builder | Channels → ⋯ → Edit Theme |
+| View orders | Orders → View |
+| Search anything | Use the top search bar — finds products, orders, customers, and pages |
