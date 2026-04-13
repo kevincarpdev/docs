@@ -64,7 +64,8 @@
             "group": "Managing Content",
             "pages": [
               "content/gallery-page",
-              "content/faq-blocks"
+              "content/faq-blocks",
+              "content/landing-pages"
             ]
           },
           {

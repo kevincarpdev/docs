@@ -1,0 +1,196 @@
+---
+title: "Landing Pages"
+description: "How to create and populate the four landing page templates using Page Builder widgets."
+---
+
+Landing pages on Rust-Oleum HOME are standard BigCommerce web pages with a **custom page template** that replaces the default two-column layout with a full-width, region-based canvas. Each template defines a set of named drop zones — **regions** — where you place widgets in Page Builder.
+
+<Note>
+Landing pages are not built with a different tool. The same Page Builder widgets you use everywhere else are dragged into the landing page regions. The template just controls which regions exist and in what order.
+</Note>
+
+---
+
+## How to create a landing page
+
+1. Go to **Storefront → Web Pages** in the BigCommerce admin
+2. Click **Create a Page**
+3. Fill in the **Page Name** and **Page URL**
+4. Under **Template File**, select one of the four landing page templates (see below)
+5. Click **Save**
+6. Go to **Storefront → Page Builder**
+7. Select the new page from the page picker at top-left
+8. Drag widgets from the left panel into each region on the canvas
+9. Click **Save**, then **Publish**
+
+<Note>
+The template file selector is in the **Advanced** or **Other** section of the web page form — scroll down if you don't see it immediately.
+</Note>
+
+---
+
+## Choosing the right template
+
+| Template | File | Best for |
+|----------|------|----------|
+| **Campaign** | `landing-campaign` | Seasonal promotions, product launches, sale events |
+| **Full Width** | `landing-full-width` | Long-form editorial, brand storytelling, hub pages |
+| **Category** | `landing-category` | Product category overviews (e.g. "Countertop Coatings") |
+| **Product Story** | `landing-product-story` | Single product deep-dives with how-to and benefits |
+
+---
+
+## Template: Campaign
+
+Use for time-limited promotions, product launches, and seasonal campaigns. Optimized for a single conversion goal with hero → offer → products → social proof → CTA flow.
+
+### Regions
+
+| Region | Recommended widgets | Purpose |
+|--------|---------------------|---------|
+| `landing_campaign_hero` | Hero Carousel, Hero | Primary campaign visual and headline |
+| `landing_campaign_offer` | Offer Banner, Horizontal Banner | Promotional details, pricing, or discount callout |
+| `landing_campaign_featured_products` | Product Grid, Product Highlights | Products featured in the campaign |
+| `landing_campaign_social_proof` | Reviews, UGC, User Post | Customer proof and trust signals |
+| `landing_campaign_cta` | Title Section, Offer Banner | Final call to action / coupon |
+
+### Example layout
+
+```
+┌─────────────────────────────────────┐
+│  Hero Carousel (full-width hero)    │  ← landing_campaign_hero
+├─────────────────────────────────────┤
+│  Offer Banner (promo details)       │  ← landing_campaign_offer
+├─────────────────────────────────────┤
+│  Product Grid (featured products)   │  ← landing_campaign_featured_products
+├─────────────────────────────────────┤
+│  Reviews (social proof)             │  ← landing_campaign_social_proof
+├─────────────────────────────────────┤
+│  Title Section (coupon CTA)         │  ← landing_campaign_cta
+└─────────────────────────────────────┘
+```
+
+---
+
+## Template: Full Width
+
+The most flexible template — use for long-form brand storytelling, hub pages, or any page that needs multiple editorial sections. Three content sections give you room to mix widgets freely.
+
+### Regions
+
+| Region | Recommended widgets | Purpose |
+|--------|---------------------|---------|
+| `landing_full_width_hero` | Hero, Hero Carousel | Page header |
+| `landing_full_width_content_section_1` | Image Text, Benefits, Values Block | First editorial block |
+| `landing_full_width_content_section_2` | Environment Block, Quote Image, How It Works | Second editorial block |
+| `landing_full_width_content_section_3` | Step Section, Comparison, Image Text | Third editorial block |
+| `landing_full_width_featured_products` | Product Grid, Product Highlights, Bundle Offer | Product showcase |
+| `landing_full_width_gallery` | Gallery, Before & After | Visual proof / inspiration |
+| `landing_full_width_testimonials` | Reviews, UGC, User Post | Social proof |
+| `landing_full_width_cta` | Title Section, Newsletter, Offer Banner | Page-level CTA |
+
+### Example layout
+
+```
+┌─────────────────────────────────────┐
+│  Hero (editorial header)            │  ← landing_full_width_hero
+├─────────────────────────────────────┤
+│  Image Text (brand story section)   │  ← landing_full_width_content_section_1
+├─────────────────────────────────────┤
+│  Benefits (key product claims)      │  ← landing_full_width_content_section_2
+├─────────────────────────────────────┤
+│  How It Works (process steps)       │  ← landing_full_width_content_section_3
+├─────────────────────────────────────┤
+│  Product Grid (shop the line)       │  ← landing_full_width_featured_products
+├─────────────────────────────────────┤
+│  Gallery – Inspiration variant      │  ← landing_full_width_gallery
+├─────────────────────────────────────┤
+│  UGC (customer content)             │  ← landing_full_width_testimonials
+├─────────────────────────────────────┤
+│  Newsletter (email signup)          │  ← landing_full_width_cta
+└─────────────────────────────────────┘
+```
+
+---
+
+## Template: Category
+
+Use for product category overview pages — e.g. "Countertop Coatings", "Cabinet Paint", "Floor Coatings". Structured to introduce the category, showcase products, and link to sub-categories.
+
+### Regions
+
+| Region | Recommended widgets | Purpose |
+|--------|---------------------|---------|
+| `landing_category_hero` | Hero, Horizontal Banner | Category header image and headline |
+| `landing_category_grid` | Categories | Surface/application type navigation cards |
+| `landing_category_features` | Benefits, Image Text | Category-level product benefits |
+| `landing_category_products` | Product Grid, Product Highlights | Products in this category |
+| `landing_category_related_categories` | Categories | Related or adjacent category links |
+| `landing_category_testimonials` | Reviews, UGC | Category-level social proof |
+
+### Example layout
+
+```
+┌─────────────────────────────────────┐
+│  Hero (category header)             │  ← landing_category_hero
+├─────────────────────────────────────┤
+│  Categories (surface type grid)     │  ← landing_category_grid
+├─────────────────────────────────────┤
+│  Benefits (category features)       │  ← landing_category_features
+├─────────────────────────────────────┤
+│  Product Grid (category products)   │  ← landing_category_products
+├─────────────────────────────────────┤
+│  Categories (related categories)    │  ← landing_category_related_categories
+├─────────────────────────────────────┤
+│  Reviews (category reviews)         │  ← landing_category_testimonials
+└─────────────────────────────────────┘
+```
+
+---
+
+## Template: Product Story
+
+Use for single-product deep-dive pages — telling the full story of one product or product line: benefits, how to use it, real results, and a path to purchase.
+
+### Regions
+
+| Region | Recommended widgets | Purpose |
+|--------|---------------------|---------|
+| `landing_product_story_hero` | Hero | Product hero — image or video |
+| `landing_product_story_benefits` | Benefits, Image Text | Key product benefits and claims |
+| `landing_product_story_gallery` | Gallery, Before & After | Before/after or inspiration gallery |
+| `landing_product_story_how_it_works` | How It Works, Step Section | Application steps or process |
+| `landing_product_story_products` | Product Grid, Bundle Offer, Product Application | Buy the product / related SKUs |
+| `landing_product_story_testimonials` | Reviews, UGC | Product-specific reviews and UGC |
+| `landing_product_story_cta` | Title Section, Offer Banner | Final purchase CTA or promotion |
+
+### Example layout
+
+```
+┌─────────────────────────────────────┐
+│  Hero – video type (product video)  │  ← landing_product_story_hero
+├─────────────────────────────────────┤
+│  Benefits (3–6 product claims)      │  ← landing_product_story_benefits
+├─────────────────────────────────────┤
+│  Before & After (transformation)    │  ← landing_product_story_gallery
+├─────────────────────────────────────┤
+│  Step Section (how to apply)        │  ← landing_product_story_how_it_works
+├─────────────────────────────────────┤
+│  Product Application (buy)          │  ← landing_product_story_products
+├─────────────────────────────────────┤
+│  Reviews (product reviews)          │  ← landing_product_story_testimonials
+├─────────────────────────────────────┤
+│  Offer Banner (final CTA)           │  ← landing_product_story_cta
+└─────────────────────────────────────┘
+```
+
+---
+
+## Tips
+
+- **One hero per page.** Every template starts with a hero region — always fill it. A page without a hero looks broken.
+- **Regions are ordered top-to-bottom.** You can't reorder regions within a template. If you need a different order, you may need a different template or ask a developer.
+- **Each region can hold multiple widgets.** You can stack widgets inside a region — but keep it to 1–2 per region to avoid visual clutter.
+- **Widgets placed in the wrong region** will render in the wrong position on the page. Double-check the region label in Page Builder before dropping a widget.
+- **The two-column layout is hidden** on all landing page templates. Don't try to use the Column 1/Column 2 regions — they exist in the Page Builder UI but are hidden via CSS on these templates.
+- **Anchor links work across all regions.** If you set an Anchor in a widget's Settings panel, you can link to it from navigation or other widgets using `#anchor-name`.
