@@ -37,13 +37,15 @@
               "dev/theme-overview",
               "dev/styles",
               "dev/pdp-images",
-              "dev/react-components"
+              "dev/react-components",
+              "dev/metafields"
             ]
           },
           {
             "group": "Deployment",
             "pages": [
               "dev/stencil-deploy",
+              "dev/cloudflare",
               "dev/gotchas"
             ]
           }
