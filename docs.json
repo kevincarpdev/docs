@@ -92,7 +92,8 @@
               "content/widgets/gallery-media",
               "content/widgets/educational-process",
               "content/widgets/community-social",
-              "content/widgets/blog-content"
+              "content/widgets/blog-content",
+              "content/widget-settings"
             ]
           },
           {

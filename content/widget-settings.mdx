@@ -1,0 +1,653 @@
+---
+title: "Widget Settings Reference"
+description: "Every field available in the Page Builder settings panel (⋯ menu) for each widget."
+---
+
+When you click **⋯ → Settings** on a widget in Page Builder, a panel opens on the right. This page documents every field in that panel — what it does, what type it is, and when it appears (some fields are conditional and only show when another field is set a certain way).
+
+<Note>
+  Fields marked **(optional)** can be left blank without breaking the widget. Fields marked **(conditional)** only appear when another field is set to a specific value.
+</Note>
+
+---
+
+## Hero Carousel
+
+**Array:** Slides (repeatable — add as many slides as needed)
+
+Each slide has these fields:
+
+| Field | Type | Notes |
+|---|---|---|
+| Badge | Text | Short label above the headline (optional) |
+| Badge Subtext | Text | Smaller text below the badge (optional) |
+| Badge URL | Text | Makes the badge a clickable link (optional) |
+| Headline | Text | Main slide heading |
+| Subheadline | Text | Supporting line below the headline |
+| Background Image | Image | Full-bleed slide background |
+| Panel Background Color | Text | Hex color for the content panel (default: `#5F6D68`) |
+| Primary Button Text | Text | CTA button label |
+| Primary Button URL | Text | CTA button destination |
+| Secondary Button Text | Text | Second CTA label (optional) |
+| Secondary Button URL | Text | Second CTA destination (optional) |
+| Footer Text | Text | Small text below the CTAs (optional) |
+| Footer Link | Text | Makes footer text a link (optional) |
+
+**Settings tab:**
+
+| Field | Type | Notes |
+|---|---|---|
+| Anchor | Text | Sets a `#anchor` ID on this widget for in-page links (optional) |
+
+---
+
+## Hero
+
+**Layout variants:** `responsive`, `full-width`, `homepage`, `roomvo`
+
+**Array:** Media Items (image or video per item)
+
+Each media item has:
+
+| Field | Type | Notes |
+|---|---|---|
+| Type | Select | `Image` or `Video` |
+| Image | Image | (conditional: shown when Type = Image) |
+| Video URL | Text | (conditional: shown when Type = Video) |
+| Homepage Override fields | — | Heading, Subheading, Body, Background Color, Primary CTA, Secondary CTA — these override the global hero copy for this specific slide (homepage variant only) |
+
+**Settings tab sections:**
+
+| Section | Field | Type | Notes |
+|---|---|---|---|
+| Layout Settings | Layout Variant | Select | `full-width`, `responsive`, `homepage`, `roomvo` |
+| Layout Settings | Desktop Arrangement | Select | `Stacked` or `Side by side` — (conditional: responsive only) |
+| Layout Settings | Mobile Arrangement | Select | `Stacked image top` or `Stacked image bottom` — (conditional: responsive only) |
+| Layout Settings | Homepage Background | Select | Rocky River, Bijou Blue, Marine Magic, Other — (conditional: homepage only) |
+| Layout Settings | Custom Background | Color picker | (conditional: Background = Other) |
+| Layout Settings | Anchor | Text | Optional in-page anchor ID |
+| Label | Label Type | Select | Discount label style — (conditional: responsive or full-width only) |
+| Label | Label Text | Text | optional |
+| Label | Date | Text | UTC date format (optional) |
+| Label | Pill | Text | Pill text — (conditional: homepage only) |
+| Copy | Heading | Text | Main hero headline |
+| Copy | Subheading | Text | Supporting line (optional) |
+| Copy | Body | Text | Body copy |
+| Surface Selector | Show surface selector | Toggle | Enables Floor/Cabinet/Countertop tabs — (conditional: responsive only) |
+| Surface Selector | Tab 1–3 Label | Text | Tab label (conditional: surface selector on) |
+| Surface Selector | Tab 1–3 Link | Text | Tab destination URL (conditional: surface selector on) |
+| Surface Selector | Tab 1–3 Icon | Select | Floor, Cabinet, Countertop, Other, None (conditional: surface selector on) |
+| Surface Selector | Tab 1–3 Active | Toggle | Pre-selects this tab (conditional: surface selector on) |
+| CTA | Destination Type | Select | Page URL or Product — (conditional: responsive, full-width, homepage) |
+| CTA | Text | Text | Button label (optional) |
+| CTA | Left/Right Icon | Select | Phosphor icon name |
+| CTA | Variant | Select | Button style |
+| Secondary CTA | (same CTA fields) | — | (conditional: homepage only) |
+| Secondary CTA | Tagline | Text | Small text below the secondary CTA (optional) |
+| Roomvo CTA | (CTA fields without destination) | — | (conditional: roomvo only) |
+
+---
+
+## Horizontal Banner
+
+**Array:** Images (repeatable)
+
+| Field | Type | Notes |
+|---|---|---|
+| Image | Image | One image per item |
+
+**Settings:**
+
+| Section | Field | Type | Notes |
+|---|---|---|---|
+| Copy | Title | Text | Banner headline |
+| Copy | Body | Text | Supporting copy |
+| CTA | CTA Text | Text | Button label |
+| CTA | CTA Icon | Select | Phosphor icon (optional) |
+| CTA | Custom Icon Name | Text | (conditional: Icon = Other) |
+| CTA | Destination Type | Select | Page URL or Product |
+| CTA | Page URL | Text | (conditional: Destination = Page) |
+| CTA | Product | Product picker | (conditional: Destination = Product) |
+
+---
+
+## Offer Banner
+
+**Settings:**
+
+| Section | Field | Type | Notes |
+|---|---|---|---|
+| Background | Background Image | Image | Full-width banner background |
+| Settings | Anchor | Text | Optional in-page anchor ID |
+
+---
+
+## Image Text
+
+**Layout variants:** `Images Left`, `Images Right`
+
+**Array:** Images (repeatable)
+
+| Field | Type | Notes |
+|---|---|---|
+| Image | Image | One image per item |
+
+**Settings:**
+
+| Section | Field | Type | Notes |
+|---|---|---|---|
+| Layout | Layout Variant | Select | Images Left or Images Right |
+| Copy | Subheading | Text | Small label above the heading |
+| Copy | Title | Text | Main heading |
+| Copy | Body | Text | Body copy |
+| CTA | (compose.button fields) | — | Destination type, text, icon, variant |
+
+---
+
+## Values Block
+
+**Settings:** 4 static value entries (no array — always exactly 4)
+
+| Field | Type | Notes |
+|---|---|---|
+| Value 1–4 Subtitle | Text | Short label for each value |
+| Value 1–4 Description | Text | Body copy for each value |
+
+---
+
+## Quote Image
+
+**Settings:**
+
+| Section | Field | Type | Notes |
+|---|---|---|---|
+| Copy | Quote | Text | The pull quote text |
+| Copy | Attribution | Text | Name or source of the quote |
+| Copy | Body | Text | Additional body copy |
+| Image | Image | Image | Portrait or lifestyle image |
+| Settings | Anchor | Text | Optional in-page anchor ID |
+
+---
+
+## Highlights
+
+**Array:** Highlights (repeatable)
+
+Each highlight has: Icon (select), Icon Name (custom text, conditional: Icon = Other), Title, Highlight text.
+
+**Settings:**
+
+| Section | Field | Type | Notes |
+|---|---|---|---|
+| Image & Placement | Desktop Placement | Select | `left` or `right` — which side the image sits |
+| Image & Placement | Image | Image | The featured image |
+| Copy | Heading | Text | Section heading |
+| Copy | Subheading | Text | Supporting line |
+| Copy | Body | Text | Body copy |
+| CTA | (compose.button fields) | — | Destination, text, icon, variant |
+
+---
+
+## Benefits
+
+**Layout variants:** `full`, `compact`
+
+**Settings:** 4 static benefit rows (no array)
+
+| Section | Field | Type | Notes |
+|---|---|---|---|
+| Header | Heading | Text | Section heading |
+| Header | Body | Text | (conditional: full variant only) |
+| Benefits | Benefit 1–4 Icon | Select | Phosphor icon |
+| Benefits | Benefit 1–4 Title | Text | Benefit label |
+| Benefits | Benefit 1–4 Description | Text | (conditional: full variant only) |
+
+---
+
+## How It Works
+
+**Layout variants:** `categories`, `flat`
+
+**Settings:**
+
+| Section | Field | Type | Notes |
+|---|---|---|---|
+| Layout | Variant | Select | `categories` or `flat` |
+| Category 1–3 Name | Text | Tab label — (conditional: categories variant) |
+| Category 1–3 Steps 1–4 | Image, Title, Description | — | Up to 4 steps per category (conditional: categories variant) |
+| Flat Style | Style | Select | `background` or `transparent` — (conditional: flat variant) |
+| Flat Style | Body Copy | Text | Intro text (conditional: flat variant) |
+| Flat Steps 1–4 | Image, Label, Title, Copy, Icon | — | (conditional: flat variant) |
+| CTA | (compose.button fields) | — | Destination, text, icon, variant |
+
+---
+
+## Step Section
+
+**Settings:**
+
+| Section | Field | Type | Notes |
+|---|---|---|---|
+| Copy | Heading | Text | Section heading |
+| Copy | Body | Text | Body copy |
+| Copy | Step Label | Text | Label used for each step (e.g. "Step") |
+| Settings | Anchor | Text | Optional in-page anchor ID |
+
+---
+
+## Step by Step
+
+**Array:** Steps (repeatable)
+
+Each step has: Heading (text), Body (text), Image (image).
+
+**Settings:**
+
+| Section | Field | Type | Notes |
+|---|---|---|---|
+| Copy | Heading | Text | Section heading |
+| Copy | Body | Text | Body copy |
+| Settings | Anchor | Text | Optional in-page anchor ID |
+
+---
+
+## Instructions
+
+**Layout variants:** `pdf`
+
+**Array:** Instructions (repeatable, mixed type)
+
+Each item has a Type selector: `section` or `instruction`.
+- Section items: Section ID, Heading, Icon
+- Instruction items: Section ID (links to a section), Name, Link
+
+**Settings:**
+
+| Section | Field | Type | Notes |
+|---|---|---|---|
+| Layout | Variant | Select | Currently: `pdf` |
+| Header | Heading | Text | |
+| Header | Subheading | Text | |
+
+---
+
+## FAQ
+
+**Layout variants:** `global`, `product`
+
+**Array:** FAQ Items (repeatable)
+
+Each FAQ has: Question (text), Answer (text), Expanded by default (toggle).
+
+**Settings:**
+
+| Section | Field | Type | Notes |
+|---|---|---|---|
+| Header | Heading | Text | Section heading |
+| Header | Body | Text | (conditional: global variant only) |
+| FAQ Source | Variant | Select | `global` or `product` |
+| Products | Product entries | Product picker | (conditional: product variant only) |
+| Settings | Animation controls | — | Expand/collapse behavior |
+| Settings | Anchor | Text | Optional in-page anchor ID |
+
+---
+
+## Product Grid
+
+**Layout variants:** `normal`, `rich`
+
+**Array:** Filters (repeatable)
+
+Each filter has: Label (text), ID (text).
+
+**Settings:**
+
+| Section | Field | Type | Notes |
+|---|---|---|---|
+| Copy | Heading | Text | Section heading |
+| Copy | Subheading | Text | Supporting line |
+| Layout | Layout Variant | Select | `normal` or `rich` |
+| Pagination | Pagination Count | Range | Number of products shown per page |
+| Settings | Anchor | Text | Optional in-page anchor ID |
+
+---
+
+## Product Highlights
+
+**Array:** Highlights (repeatable, default 1)
+
+Each highlight has: Title (text), Description (text), Product ID (text).
+
+**Settings:**
+
+| Section | Field | Type | Notes |
+|---|---|---|---|
+| Copy | Heading | Text | Section heading |
+| Copy | Body | Text | Body copy |
+| Settings | Anchor | Text | Optional in-page anchor ID |
+
+---
+
+## Product Application
+
+**Settings:**
+
+| Section | Field | Type | Notes |
+|---|---|---|---|
+| Copy | Heading | Text | Section heading |
+| Copy | Subheading | Text | Supporting line |
+| Copy | Body | Text | Body copy |
+| CTA | CTA Type | Select | `none`, `button` |
+| CTA | Button Text | Text | (conditional: CTA Type = button) |
+| CTA | URL | Text | (conditional: CTA Type = button) |
+| Settings | Anchor | Text | Optional in-page anchor ID |
+
+---
+
+## Comparison
+
+**Array:** Rows (repeatable)
+
+Each row has: Heading (text), Rust-Oleum field (text), Competitor field (text).
+
+**Settings:**
+
+| Section | Field | Type | Notes |
+|---|---|---|---|
+| Header | Heading | Text | Section heading |
+| Header | Body | Text | Body copy |
+
+---
+
+## Tiers
+
+**Array:** Tiers (repeatable, default 1)
+
+Each tier has: Icon (image), Tag (text), Title (text), Text (text), Bullet Pretext (text), Bullet Icon (select), Bullets (text area), CTA (compose.button fields).
+
+**Settings:**
+
+| Section | Field | Type | Notes |
+|---|---|---|---|
+| Copy | Header | Text | Section heading |
+| Copy | Subheader | Text | Supporting line |
+| Copy | Body | Text | Body copy |
+| Settings | Anchor | Text | Optional in-page anchor ID |
+
+---
+
+## Before & After
+
+**Settings:** 4 static slides (Slide 1–4 tabs)
+
+Each slide has: Before Image, After Image, Headline (optional), Description (optional).
+
+**Settings:**
+
+| Section | Field | Type | Notes |
+|---|---|---|---|
+| Header | Section Label | Text | Small label above the heading |
+| Header | Section Headline | Text | Main heading |
+| Settings | Anchor | Text | Optional in-page anchor ID |
+
+---
+
+## Gallery
+
+**Layout variants:** `simple`, `inspiration`
+
+**Array:** Images (repeatable)
+
+Each image has: Image (imageManager), Categories (text, used for filtering in inspiration variant), Caption (text, optional), Has Article toggle → Article Link + Article Text (conditional), Has Product toggle → Product picker (conditional), Has Link Alternative toggle → Link Title + Link Image + Link URL (conditional).
+
+**Settings:**
+
+| Section | Field | Type | Notes |
+|---|---|---|---|
+| Header | Subtitle | Text | (conditional: inspiration variant) |
+| Header | Heading | Text | (conditional: inspiration variant) |
+| Header | Body | Text | (conditional: inspiration variant) |
+| Layout | Show Navigation Arrows | Toggle | (conditional: inspiration variant) |
+| Layout | Show Dot Indicators | Toggle | (conditional: inspiration variant) |
+| Layout | Show Image Gutter | Toggle | (conditional: inspiration variant) |
+| Layout | Show Image Captions | Toggle | (conditional: inspiration variant) |
+| Layout | Show Preview Area | Toggle | (conditional: inspiration variant) |
+| CTA | (compose.button fields) | — | Destination, text, icon, variant |
+
+---
+
+## Reviews
+
+**Settings:**
+
+| Section | Field | Type | Notes |
+|---|---|---|---|
+| Review Settings | Limit | Text | Max number of reviews to show |
+| Review Settings | Sort By | Select | `rating`, `helpful`, or `recent` |
+| Review Settings | Brand ID | Text | Product ID to pull reviews from |
+| Settings | Anchor | Text | Optional in-page anchor ID |
+
+---
+
+## Blog Showcase
+
+**Layout variants:** `curated`, `hub`
+
+**Array:** Articles (conditional: hub variant only)
+
+Each article has: Image, Headline, Excerpt, CTA fields.
+
+**Settings:**
+
+| Section | Field | Type | Notes |
+|---|---|---|---|
+| Header | Heading | Text | Section heading |
+| Header | Body | Text | Body copy |
+| Layout | Variant | Select | `curated` (uses existing blog posts) or `hub` (manually curated articles) |
+
+---
+
+## Resources
+
+**Array:** Resources (repeatable, default 1)
+
+Each resource has: Title (text), URL (text), Description (text).
+
+**Settings:**
+
+| Section | Field | Type | Notes |
+|---|---|---|---|
+| Copy | Heading | Text | Section heading |
+| Copy | Subheading | Text | Supporting line |
+| Settings | Anchor | Text | Optional in-page anchor ID |
+
+---
+
+## Trend Highlight
+
+**Array:** Trends (repeatable, default 1, entry label "Trend")
+
+Each trend has: Title (text), Body (text), Images 1–5 (imageManager — up to 5 images per trend).
+
+**Settings:**
+
+| Section | Field | Type | Notes |
+|---|---|---|---|
+| Copy | Callout | Text | Small label above the heading |
+| Copy | Title | Text | Section heading |
+| Copy | Body | Text | Body copy |
+| Settings | Anchor | Text | Optional in-page anchor ID |
+
+---
+
+## Title Section
+
+**Layout variants:** `left`, `centered`
+
+**Settings:**
+
+| Section | Field | Type | Notes |
+|---|---|---|---|
+| Copy | Heading | Text | Section heading |
+| Copy | Body | Text | Body copy |
+| Copy | Subtitle | Text | Small label above or below the heading |
+| Copy | Layout Variant | Select | `left` or `centered` |
+| Discount Label | Label Type | Select | Discount label style |
+| Discount Label | Label Text | Text | optional |
+| Discount Label | Date | Text | UTC format (optional) |
+| CTA | CTA Type | Select | `none`, `coupon-copy`, `button` |
+| CTA | Coupon Code | Text | Code to display/copy — (conditional: CTA Type = coupon-copy) |
+| CTA | Button Text | Text | (conditional: CTA Type = button) |
+| CTA | Button URL | Text | (conditional: CTA Type = button) |
+| Settings | Anchor | Text | Optional in-page anchor ID |
+
+---
+
+## Environment Block
+
+**Settings:** 3 static feature entries (no array)
+
+| Section | Field | Type | Notes |
+|---|---|---|---|
+| Header | Heading | Text | Section heading |
+| Header | Subheading | Text | Supporting line |
+| Header | Body | Text | Body copy |
+| Features | Feature 1–3 Icon | Select | Phosphor icon |
+| Features | Feature 1–3 Title | Text | Feature label |
+| Features | Feature 1–3 Description | Text | Feature body |
+| Image | Background Image | Image | Full-bleed section background |
+
+---
+
+## Bundle Offer
+
+**Settings:**
+
+| Section | Field | Type | Notes |
+|---|---|---|---|
+| Header | Heading | Text | Section heading |
+| Header | Subheading | Text | Supporting line |
+| Header | Body | Text | Body copy |
+| Pricing | Price | Text | Display price |
+| Pricing | Compare At Price | Text | Strikethrough price (optional) |
+| CTA | Destination Type | Select | Page URL or Product |
+| CTA | Page URL | Text | (conditional: Destination = Page) |
+| CTA | Product | Product picker | (conditional: Destination = Product) |
+| CTA | Text | Text | Button label |
+
+---
+
+## Categories
+
+**Settings:** 4 static category entries (no array)
+
+| Field | Type | Notes |
+|---|---|---|
+| Header Heading | Text | Section heading |
+| Header Body | Text | Body copy |
+| Category 1–4 Icon | Select | Phosphor icon |
+| Category 1–4 Title | Text | Category label |
+| Category 1–4 Description | Text | Short description |
+| Category 1–4 CTA | compose.button | Destination, text, icon, variant |
+
+---
+
+## UGC (User Generated Content)
+
+**Settings:**
+
+| Section | Field | Type | Notes |
+|---|---|---|---|
+| Copy | Subtitle | Text | Small label above the quote |
+| Copy | Quote | Text | The UGC quote text (required) |
+| Identity | Avatar | Image | User photo |
+| Identity | Name | Text | User's name (required) |
+| Video | Video View | Select | `Landscape` or `Portrait` |
+| Video | Video URL | Text | Link to video (required) |
+| CTA | CTA Text | Text | Button label |
+| CTA | CTA Type | Select | `Link` or `Anchor` |
+| CTA | CTA Target | Text | URL or anchor ID |
+| Settings | Anchor | Text | Optional in-page anchor ID |
+
+---
+
+## User Post
+
+**Settings:**
+
+| Section | Field | Type | Notes |
+|---|---|---|---|
+| Header | Heading | Text | Section heading |
+| Share Content | Share Heading | Text | Heading for the share prompt |
+| Share Content | Hashtag | Text | Hashtag to pre-fill on share |
+| Share Content | Subtitle | Text | Supporting copy |
+| Share Content | Share Button Text | Text | Share CTA label |
+| Share Content | Share Button URL | Text | Share CTA destination |
+| Gallery Filters | Filter 1–4 Label | Text | Display label for each filter tab |
+| Gallery Filters | Filter 1–4 ID | Text | ID used to filter UGC content |
+| Social Links | Show Social Icons | Toggle | Enables social icon row |
+| Social Links | Facebook URL | Text | (optional) |
+| Social Links | Pinterest URL | Text | (optional) |
+| Social Links | Instagram URL | Text | (optional) |
+| Social Links | TikTok URL | Text | (optional) |
+| Social Links | YouTube URL | Text | (optional) |
+| Legacy Feed | Limit | Text | Number of posts to load |
+| Legacy Feed | Order By | Select | Sort order for feed |
+| Settings | Anchor | Text | Optional in-page anchor ID |
+
+---
+
+## Markdown
+
+**Settings:**
+
+| Field | Type | Notes |
+|---|---|---|
+| Markdown Content | Text area | Supports extended markdown and template tokens |
+| Anchor | Text | Optional in-page anchor ID |
+
+---
+
+## Newsletter
+
+**Settings:**
+
+| Section | Field | Type | Notes |
+|---|---|---|---|
+| Content | Heading | Text | Section heading |
+| Content | Body | Text | Supporting copy |
+| Content | Image | Image | Optional image |
+| Settings | Button Text | Text | Subscribe button label |
+
+---
+
+## Videos
+
+**Array:** Videos (repeatable)
+
+Each video has: Categories CSV (text), Video URL (text), Customize Content toggle → Heading + Description (conditional).
+
+**Settings:**
+
+| Section | Field | Type | Notes |
+|---|---|---|---|
+| Header | Subheading | Text | Section label |
+| Header | Heading | Text | Section heading |
+| Header | Search Placeholder | Text | Text inside the search bar |
+| Default Copy | Default Search Placeholder | Text | Fallback search text |
+| Default Copy | Default CTA Label | Text | Video CTA label |
+| Default Copy | Byline Prefix | Text | Text before the author name |
+| Default Copy | No Match Message | Text | Shown when no results found |
+| Default Copy | Pagination Count | Range | Videos per page (1–24) |
+| Featured Video | Featured Categories CSV | Text | Categories for the featured video |
+| Featured Video | Featured Badge | Text | Badge label |
+| Featured Video | Featured Video URL | Text | URL to the featured video |
+| Featured Video | Customize Featured Content | Toggle | Enables overriding heading/description |
+| Featured Video | Featured Heading | Text | (conditional: Customize = on) |
+| Featured Video | Featured Description | Text | (conditional: Customize = on) |
+| Featured Video | Customize Featured CTA | compose.button | (conditional: Customize = on) |
+| Help | Help Icon | Select | Phosphor icon |
+| Help | Help Title | Text | Help section heading |
+| Help | Help Body | Text | Help copy |
+| Help | Help Link | Text | Link for help CTA |
+| Settings | Anchor | Text | Optional in-page anchor ID |
