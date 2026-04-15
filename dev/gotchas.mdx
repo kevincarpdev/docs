@@ -1,78 +1,70 @@
 ---
 title: "Developer gotchas"
-description: "Known quirks, inconsistencies, and things to watch out for"
+description: "Current workflow pitfalls to avoid when working with widgets, placements, and theme deployment"
 ---
 
-## Widget naming inconsistencies
+## `widget.ts` is authored, `config.json` and `schema.json` are not
 
-### widget.yml vs widget.yaml
+Do not hand-edit generated widget artifacts as if they were the main source of truth.
 
-The TypeScript types (`src/types.ts`) define the meta file as `widget.yaml`, but the actual file created by `track.ts` and referenced by `sync-widgets.sh` is `widget.yml`. Always use `widget.yml` in practice.
+- author `widget.ts`
+- treat `schema.json` as the checked-in parity baseline
+- treat `config.json` as generated compatibility output
 
-### Widget type aliases
+## Placement updates are opt-in
 
-The widget registry in `widgets-loader.js` registers most widgets under multiple aliases:
+Publishing a widget does not automatically reapply placements.
 
-```js
-'herocarousel': () => import('./components/HeroCarousel.jsx'),
-'herosectioncarousel': () => import('./components/HeroCarousel.jsx'),
-'hero-carousel': () => import('./components/HeroCarousel.jsx'),
-```
+If you expect manifest placements to move or update live placements, you need `--update-placements`.
 
-When creating a new widget, always register both the **PascalCase-lowered** and **hyphenated** versions of the type. The `data-widget-type` in `widget.html` determines which alias is used.
+## Theme push and widget publish are separate
 
-## Script inconsistencies
+Publishing a widget does not deploy theme code.
 
-### publish-both-widgets.sh
+If you changed:
 
-Despite the name, `publish-both-widgets.sh` currently only publishes **HowItWorks**. The `README-WIDGETS.md` still describes it as publishing both Benefits and HowItWorks. Use `publish-all-widgets.sh` or `publish-widget.sh <name>` instead.
+- registry wiring
+- wrapper code
+- widget runtime code
+- templates or SCSS
 
-### stencil.conf.cjs
+you still need `bun run stencil:push`.
 
-This file references `webpack.dev.js` and `webpack.prod.js` via `require()`, but these files may not be present in the widget-builder repo. This config is a Stencil hook that is only relevant when running inside the Stencil theme context.
+## The publish git gate is strict
 
-## PDP rendering timing
+`bun run stencil:push` requires:
 
-### pdp-main-ready flag
+- branch `main`
+- no local changes
+- local `main` aligned with `origin/main`
 
-Below-the-fold PDP widgets (HowItWorks, ProcessSection, etc.) wait for a `pdp-main-ready` CSS class before rendering. This class is added by the widget loader after `ProductView` finishes mounting.
+It will not behave like a casual local preview command.
 
-If a widget is not appearing on a PDP, check that:
-1. The widget's `data-widget-type` is registered in `widgets-loader.js`
-2. The `ProductView` component mounted successfully (check browser console)
-3. The widget is not stuck waiting for `pdp-main-ready`
+## Do not use `stencil init`
 
-### PDP widget priority
+The repo expects config files to be placed directly in the storefront and theme directories.
 
-`product-image-gallery` widgets are prioritized first via `PDP_FIRST_WIDGET_TYPES`. All other PDP widgets load after the main product view is ready.
+Use the repo init command or place the files manually. Do not rely on the older interactive Stencil bootstrap workflow.
 
-## Duplicate React prevention
+## Environment switching is multi-file
 
-Both `app.js` and `widgets-loader.js` need React. To prevent duplicate React instances (which cause hook errors), they share a single `getReactModules()` function exported from `widgets-loader.js`. Never import React directly in widget components — always use the shared modules.
+When you switch stores or environments, rotate the whole set:
 
-## custom-widgets-backup is not deployed
+- repo root `.env`
+- storefront `.env`
+- theme config
+- theme secrets
 
-The `custom-widgets-backup/` directory in the Stencil theme is listed in `.stencilignore`. It is purely a **version control backup** of widget source files. It is not included in the theme bundle that gets pushed to BigCommerce.
+Leaving one file pointed at the old environment creates hard-to-debug mismatches.
 
-The actual widget templates live on BigCommerce's servers (uploaded via the Widgets API). The backup directory is for developer reference and git history.
+## Wrappers are for runtime data, not for everything
 
-## Unpublish command not wired up
+If a widget can render from authored props alone, load the package widget directly from the registry.
 
-The file `src/cli/deployment/widgetTemplateUnpublish.ts` exists and implements widget deletion, but it is **not registered** in `src/cli/index.ts`. To unpublish a widget, use the BigCommerce API directly.
+Add a theme wrapper only when storefront data or theme-side orchestration is actually needed.
 
-## Image alt text normalization
+## Keep the template thin
 
-The `?finish=` / `?color=` query parameter matching normalizes strings by lowercasing and stripping hyphens, underscores, and spaces. This means:
+`template.html` should hand off props, not recreate the full UI system in Handlebars.
 
-- `?finish=Natural` matches alt text `Natural`, `natural`, `NATURAL`
-- `?finish=Light-Gray` matches alt text `Light Gray`, `lightgray`, `light-gray`
-
-But it does **not** handle typos or abbreviations. The alt text must be an exact normalized match.
-
-## Variant images get generic alt text
-
-When a variant image is prepended to the gallery (because it does not already exist in the base image list), it receives a generic `alt: 'Product image'` rather than the variant name. This is a known limitation.
-
-## MutationObserver for widget loading
-
-`widgets-loader.js` uses a `MutationObserver` to detect new widget nodes added to the DOM (for SPA-like page transitions or lazy-loaded content). If you dynamically inject widget HTML after page load, the observer will pick it up automatically.
+If a widget is getting visually complex in the template, move that work into the React implementation.

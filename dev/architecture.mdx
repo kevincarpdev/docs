@@ -1,76 +1,105 @@
 ---
 title: "Architecture overview"
-description: "How the widget builder, Stencil theme, and BigCommerce platform connect"
+description: "How the Bun workspaces, Stencil theme, shared widgets, and BigCommerce runtime connect"
 ---
 
-## System diagram
+## System map
 
 ```mermaid
 flowchart TB
-    subgraph widgetBuilder ["Widget Builder Repo"]
-        WB_Widgets["57 Widget Folders"]
-        WB_CLI["widget-builder CLI"]
-        WB_Sync["sync-widgets.sh"]
+    subgraph repo ["This repository"]
+        subgraph packages ["packages/*"]
+            api["packages/api"]
+            ui["packages/ui"]
+            widgets["packages/widgets"]
+            tooling["packages/tooling"]
+        end
+
+        subgraph storefront ["apps/storefronts/rustoleum-home"]
+            env["storefront .env"]
+            theme["stencil-theme"]
+            registry["widgets registry"]
+            wrappers["theme widget wrappers"]
+            templates["Handlebars templates"]
+        end
+
+        docs["mintlify-docs"]
     end
-    subgraph stencilTheme ["Stencil Theme Repo"]
-        ST_Templates["Handlebars Templates"]
-        ST_React["React Components + MUI"]
-        ST_SCSS["SCSS Styles"]
-        ST_Backup["custom-widgets-backup"]
-        ST_Loader["widgets-loader.js"]
-    end
-    subgraph bigcommerce ["BigCommerce"]
-        BC_API["Widgets API"]
-        BC_PB["Page Builder"]
-        BC_Store["Live Storefront"]
-    end
-    WB_CLI -->|"publish via API"| BC_API
-    WB_Sync -->|"copies widget files"| ST_Backup
-    BC_API -->|"registers widgets"| BC_PB
-    BC_PB -->|"places widgets on pages"| BC_Store
-    ST_Templates -->|"stencil push"| BC_Store
-    ST_Loader -->|"hydrates DOM nodes"| ST_React
+
+    widgets --> registry
+    ui --> widgets
+    api --> wrappers
+    tooling --> widgets
+    tooling --> theme
+    templates --> registry
+    registry --> wrappers
 ```
 
-## How it works
+## Runtime model
 
-### Widget lifecycle
+The storefront is a hybrid Stencil + React system:
 
-1. **Develop** — A widget is created in the `widget-builder` repo as a folder containing `widget.html`, `schema.json`, `config.json`, and `meta.json`.
-2. **Preview** — `widget-builder start <name>` opens a local preview at `localhost:8080`.
-3. **Publish** — `widget-builder publish <name>` sends the widget template to the BigCommerce Widgets API. A UUID is stored in `widget.yml` for future updates.
-4. **Sync** — `sync-widgets.sh to-stencil <name>` copies the widget files into the Stencil theme's `custom-widgets-backup/` directory for version control.
-5. **Place** — Content editors drag the widget onto pages in Page Builder.
-6. **Render** — On the live storefront, `widgets-loader.js` finds DOM nodes with `data-widget-type` attributes and hydrates them with the matching React component.
+- Handlebars templates render the page shell and widget mount containers.
+- `template.html` in each package widget serializes merchant-authored values into `data-*` attributes.
+- The theme widget runtime reads `data-widget-type` and `data-widget-props`.
+- `assets/js/framework/widgets/registry.js` resolves the widget type to either:
+  - a direct package widget import from `@thesparklaboratory/rusto-widgets/...`, or
+  - a theme-local wrapper when storefront data or theme-specific integration is required.
 
-### Stencil theme rendering
-
-The storefront uses a hybrid rendering model:
-
-- **Server-side**: Handlebars templates render the initial HTML (product data, page layout, SEO markup).
-- **Client-side**: React components mount into specific DOM nodes to provide interactive UI (product gallery, options selector, carousels, etc.).
-- **Widgets**: Page Builder widgets are Handlebars templates that output `div` elements with `data-*` attributes. The `widgets-loader.js` script reads those attributes and renders the corresponding React component.
-
-### PDP rendering flow
+## Widget flow
 
 ```mermaid
-flowchart LR
-    A["product.html"] -->|"includes"| B["product-view.html"]
-    B -->|"outputs JSON in data-* attrs"| C["#react-product-view"]
-    C -->|"app.js mounts"| D["ProductView.jsx"]
-    D --> E["ProductImageGallery"]
-    D --> F["ProductOptions"]
-    D --> G["ProductAccordions"]
-    D --> H["DealsSection"]
+sequenceDiagram
+    participant Author as Merchant authoring
+    participant Manifest as widget.ts
+    participant Template as template.html
+    participant BC as BigCommerce Widgets API
+    participant Theme as theme registry runtime
+    participant Widget as React widget
+
+    Author->>Manifest: edits schema-backed content in Page Builder
+    Manifest->>Template: generates config/schema contract
+    Template->>BC: published template + widget + optional placements
+    BC->>Theme: renders widget mount container on the storefront
+    Theme->>Widget: loads package widget or wrapper by widget type
 ```
 
-### Key files
+## Sources of truth
 
-| File | Role |
-|------|------|
-| `assets/js/app.js` | Bootstrap script — mounts React PDP, initializes widgets |
-| `assets/js/widgets-loader.js` | Widget registry, hydration, PDP ordering |
-| `templates/pages/product.html` | PDP page shell with widget regions |
-| `templates/components/products/product-view.html` | Main PDP partial — hidden Stencil form + React mount point |
-| `assets/js/themes/rustoleumHomeTheme.js` | MUI theme tokens (colors, spacing, typography) |
-| `assets/scss/theme.scss` | Global SCSS entry point |
+| Concern | Source of truth |
+| --- | --- |
+| Shared theme tokens | `packages/ui/src/theme/theme.ts` and `packages/ui/src/theme/tokens.ts` |
+| Widget authoring contract | `packages/widgets/src/widgets/<widget-name>/widget.ts` |
+| Widget template handoff | `packages/widgets/src/widgets/<widget-name>/template.html` |
+| Widget publish and placement commands | `packages/tooling/cli.ts` |
+| Theme widget registration | `apps/storefronts/rustoleum-home/stencil-theme/assets/js/framework/widgets/registry.js` |
+| Theme deployment bundle and push | `apps/storefronts/rustoleum-home/stencil-theme/scripts/*` and root `stencil:*` scripts |
+
+## Build and dev flow
+
+### `bun run dev`
+
+The root `dev` command is the preferred local entrypoint.
+
+It:
+
+1. watches `packages/api`, `packages/ui`, and `packages/widgets`
+2. rebuilds package `dist` output when those sources change
+3. starts the Stencil theme server
+
+Use this when you are working on package code and need the theme to pick up changes continuously.
+
+### `bun run stencil:start`
+
+This starts the theme server through the theme package scripts. Use it when you only need the theme runtime and already have current package build artifacts.
+
+## Theme deployment boundary
+
+Widget publishing and theme deployment are related but separate:
+
+- `bun run widgets:publish` updates widget templates, widgets, and optional placements in BigCommerce.
+- `bun run stencil:push` uploads the Stencil theme bundle and activates it.
+
+If you change React widget runtime code, wrappers, the registry, Handlebars templates, SCSS, or other theme assets, you need a theme push.
+
+If you change only the Page Builder manifest or widget template contract, widget publish may be enough.

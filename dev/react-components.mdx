@@ -1,129 +1,114 @@
 ---
-title: "React component reference"
-description: "Key React components used on the PDP and for widget rendering"
+title: "Mapping Figma to MUI"
+description: "How to translate Figma designs into repo-native MUI and shared UI code without copying raw CSS"
 ---
 
-## PDP components
+## Use the repo's component order
 
-These components render the product detail page. They are mounted by `app.js` into `#react-product-view`.
+When a design needs to become code, choose components in this order:
 
-### ProductView
+1. an existing domain or widget component
+2. an existing shared component from `packages/ui`
+3. MUI composition with `styled()`
+4. a new shared component in `packages/ui`
+5. a widget-local or theme-local component only when the surface is not reusable
 
-**File:** `assets/js/components/ProductView.jsx`
+Do not start by copying raw CSS values from Figma.
 
-The top-level PDP component. Manages:
-- Image gallery state (active index, variant images, lightbox)
-- Breadcrumb building from multiple data sources
-- Category detection (accessory vs. non-accessory)
-- Layout grid (image section + details section)
+## Token-first mapping
 
-**Props:**
-| Prop | Type | Source |
-|------|------|--------|
-| `product` | Object | `data-product` JSON from Handlebars |
-| `images` | Array | `data-images` JSON from Handlebars |
-| `breadcrumbs` | Array | `data-breadcrumbs` JSON from Handlebars |
-| `categories` | Array | `data-categories` JSON from Handlebars |
-| `showDeals` | Boolean | Default `true` |
+Theme tokens live in:
 
-### ProductImageGallery
+- `packages/ui/src/theme/theme.ts`
+- `packages/ui/src/theme/tokens.ts`
 
-**File:** `assets/js/components/ProductImageGallery.jsx`
+Map design values through those surfaces first:
 
-Desktop and mobile image gallery with:
-- Thumbnail strip (max 5 visible, "+N more" overlay)
-- Swipeable mobile carousel
-- Lightbox integration
-- Active image tracking from parent
+| Design intent | Repo surface |
+| --- | --- |
+| colors | `semanticColors` |
+| typography | `typographyPresets`, `resolveTypographyPreset(...)`, `resolveTypographyScale(...)` |
+| spacing rhythm | theme spacing and token spacing values |
+| radius | `radius` |
+| responsive breakpoints | `resolveViewportMinContentWidth(...)` and theme breakpoints |
 
-### ProductOptions
+## Typography mapping
 
-**File:** `assets/js/components/ProductOptions.jsx`
+Prefer repo typography presets over ad hoc font values.
 
-Renders product options (color swatches, dropdowns, quantity). Listens to the hidden Stencil form for option change events and syncs React state.
+Typical pattern:
 
-### ProductAccordions
-
-**File:** `assets/js/components/ProductAccordions.jsx`
-
-Expandable sections below the product options: Description, Specifications, Kit Includes, etc. Content comes from product metafields.
-
-### DealsSection
-
-**File:** `assets/js/components/DealsSection.jsx`
-
-Shows supplemental info below options: additional supplies image, satisfaction message, shipping message. Data comes from channel metafields.
-
-### StickyPDPHeader
-
-**File:** `assets/js/components/StickyPDPHeader.jsx`
-
-Fixed header that appears when scrolling past the Add to Cart button. Shows product name, price, and a sticky Add to Cart CTA.
-
-## Accessory vs. non-accessory logic
-
-`ProductView` detects whether a product is in an "Accessories" category:
-
-```js
-const isAccessoryCategory = useMemo(() => {
-  const accessorySlug = 'accessor';
-  const check = (str) => (str || '').toLowerCase().includes(accessorySlug);
-  // checks categories, fetchedCategories, and product.category
-  // ...
-}, [...]);
+```tsx
+import { resolveTypographyPreset, resolveTypographyScale } from "@thesparklaboratory/rusto-ui/theme";
 ```
 
-When `isAccessoryCategory` is `true`:
-- The Room Visualizer callout is hidden
-- The mobile visualizer is hidden
+Practical rule:
 
-## Widget components
+- choose the closest preset first
+- only override what the preset does not already express
+- do not hardcode typography pixels when a preset or scale token already matches the intent
 
-These are hydrated by `widgets-loader.js` from Page Builder widget DOM nodes.
+## Layout mapping
 
-### HeroCarousel / HeroSectionCarousel
+Break the Figma node tree into:
 
-Full-width hero banner with slides. Supports badge, headline, subheadline, background image, CTA buttons, and autoplay.
+- section or surface container
+- content-width container
+- reusable child components
+- slot regions
 
-### BenefitsBlock / Benefits2Block
+Then implement each layer intentionally in MUI instead of flattening the design into one giant style object.
 
-Product benefit icons with labels. Two layout variants for different page contexts.
+## Icons
 
-### HowItWorks / HowItWorks2
+Use the shared icon surface:
 
-Step-by-step process section with category tabs (Floor, Countertop, Cabinet). On PDP pages, automatically selects the tab matching the product's category.
+```tsx
+import { CaretRightIcon, resolveIcon } from "@thesparklaboratory/rusto-ui/Icon";
+```
 
-### GalleryBlock
+Rules:
 
-Image gallery with filtering (Surface/Room tabs, category filters). Used on the Inspiration Gallery page.
+- prefer Phosphor-backed shared icon exports
+- use `resolveIcon()` only when the icon name is data-driven
+- do not import icon packages directly in normal consumer code
 
-### BlogArticles / RelatedArticles
+## Widget-specific mapping
 
-Article card grids. BlogArticles for index pages, RelatedArticles for article detail pages.
+For widgets, split the design into two responsibilities:
 
-### ProductCategories / CategoryBlock
+- `widget.ts` for merchant-configurable inputs
+- React component code for layout, states, token mapping, and behavior
 
-Category navigation cards with images.
+Do not mirror every Figma layer as a widget setting. Only expose inputs that merchants should actually control.
 
-### FaqBlock / FaqHighlightBlock / FAQPageContentBlock
+## MUI implementation patterns
 
-Various FAQ display formats — accordion, highlighted, and full-page layouts.
+Prefer:
 
-### ProcessSectionBlock
+- named styled components
+- package UI primitives
+- semantic layout wrappers
 
-Multi-step process visualization with category-aware content (Floor, Countertop, Cabinet).
+Avoid:
 
-### PDFInstructionsBlock
+- raw hex values copied from Figma
+- direct pixel typography values when token helpers exist
+- large one-off `sx` objects that become the only source of truth
 
-Downloadable PDF links for product instructions. Commonly used on flooring kit PDPs.
+## State checklist
 
-## Component conventions
+Every serious design translation should account for the applicable states:
 
-All React components follow these patterns:
+- default
+- hover
+- focus
+- active
+- selected
+- disabled
+- loading
+- empty
+- error
+- permission-denied
 
-- Wrapped in `React.memo()` for performance
-- Have a `displayName` set for debugging
-- Use `styled()` from MUI (no `sx` props or inline styles)
-- Import colors/spacing from `rustoleumHomeTheme.js`
-- Use `@phosphor-icons/react` for icons
-- Components exceeding ~200 lines are split into smaller focused components
+If a state is not shown in the design file, make the behavior explicit during implementation instead of ignoring it.

@@ -1,79 +1,105 @@
 ---
 title: "Widget system overview"
-description: "How Page Builder widgets are built, registered, and rendered on the storefront"
+description: "How package-backed widgets are authored, registered, published, and rendered in the storefront"
 ---
 
-## What is a widget?
+## The current widget model
 
-A widget is a reusable content block that content editors can drag onto pages in BigCommerce Page Builder. Each widget consists of:
+A widget in this repo is a package-backed Page Builder surface made from three layers:
 
-- A **Handlebars template** (`widget.html`) that outputs HTML with `data-*` attributes
-- A **schema** (`schema.json`) that defines the editing UI in Page Builder
-- A **React component** in the Stencil theme that hydrates the widget on the live storefront
+1. `widget.ts` defines the merchant-facing schema, translations, defaults, and optional placements.
+2. `template.html` is the Stencil SSR handoff that serializes props into the DOM.
+3. the React implementation renders the widget on the storefront or in Page Builder preview.
 
-## The widget registry
+## Authoritative widget location
 
-When the storefront loads, `widgets-loader.js` scans the page for elements with `data-widget-type` attributes and maps each type to a React component.
+All package widgets live under:
 
-```js
-const widgetRegistry = {
-  'herocarousel': () => import('./components/HeroCarousel.jsx'),
-  'herosectioncarousel': () => import('./components/HeroCarousel.jsx'),
-  'benefits': () => import('./components/BenefitsBlock.jsx'),
-  'how-it-works': () => import('./components/HowItWorks.jsx'),
-  'howitworks': () => import('./components/HowItWorks.jsx'),
-  'blog-articles': () => import('./components/BlogArticles'),
-  'galleryblock': () => import('./components/GalleryBlock.jsx'),
-  // ... 50+ more entries
-};
+```text
+packages/widgets/src/widgets/<widget-name>/
 ```
 
-Most widgets have multiple aliases (e.g., `hero-carousel` and `herocarousel` both resolve to the same component). This is intentional — it handles different naming conventions between widget templates.
+That folder is the authoritative implementation surface for package-backed widgets.
 
-## PDP widget priority
-
-On product detail pages, the loader prioritizes certain widgets to ensure the above-the-fold experience loads first:
-
-```js
-const PDP_FIRST_WIDGET_TYPES = ['product-image-gallery', 'productimagegallery'];
-```
-
-Other PDP widgets (like HowItWorks, ProcessSection) wait for the `pdp-main-ready` flag, which is set after `ProductView` finishes rendering.
-
-## Widget hydration flow
+## Runtime flow
 
 ```mermaid
-sequenceDiagram
-    participant PB as Page Builder
-    participant HTML as Storefront HTML
-    participant Loader as widgets-loader.js
-    participant Registry as Widget Registry
-    participant React as React Component
-
-    PB->>HTML: Renders widget div with data-widget-type
-    HTML->>Loader: Page loads, MutationObserver fires
-    Loader->>Registry: Looks up component by type
-    Registry->>React: Dynamic import()
-    Loader->>React: Renders with props from data-* attributes
+flowchart LR
+    manifest["widget.ts"] --> artifacts["generated config/schema"]
+    template["template.html"] --> bc["BigCommerce widget render"]
+    bc --> dom["data-widget-type + data-widget-props"]
+    dom --> registry["theme registry.js"]
+    registry --> component["package widget or theme wrapper"]
 ```
 
-## Lazy loading
+## Registry model
 
-All React and MUI imports are loaded dynamically. The `getReactModules()` function is shared between `widgets-loader.js` and `app.js` to prevent duplicate React instances:
+The theme registry lives at:
 
-```js
-export const getReactModules = async () => {
-  if (!reactModules) {
-    const [React, ReactDOM, MuiStyles, CssBaseline, rustoleumHomeTheme] =
-      await Promise.all([
-        import('react'),
-        import('react-dom/client'),
-        import('@mui/material/styles'),
-        import('@mui/material/CssBaseline'),
-        import('./themes/rustoleumHomeTheme'),
-      ]);
-    // ...
-  }
-  return reactModules;
-};
+```text
+apps/storefronts/rustoleum-home/stencil-theme/assets/js/framework/widgets/registry.js
 ```
+
+Each entry registers one or more widget types and points to a runtime loader.
+
+There are two common patterns:
+
+| Pattern | Use when |
+| --- | --- |
+| direct package widget import | the widget is fully presentational and can run from package props alone |
+| theme wrapper import | the widget needs storefront data, theme-side data shaping, or runtime orchestration |
+
+## Package widget vs wrapper
+
+Use a direct package widget when:
+
+- the widget can render entirely from author-provided props
+- all necessary data can be serialized in `template.html`
+
+Use a theme wrapper when:
+
+- the widget needs storefront APIs or theme runtime data
+- the widget needs product, review, resource, or other runtime hydration
+- the theme must normalize or augment props before render
+
+## Widget publish boundary
+
+Publishing a widget updates BigCommerce widget resources:
+
+- widget template
+- widget
+- optional placements
+
+It does **not** deploy the Stencil theme bundle.
+
+If you change the React widget implementation, wrapper behavior, registry wiring, or any other theme code, you still need a theme push after the widget publish flow.
+
+## Placement model
+
+Widget placements can be defined in `widget.ts`:
+
+```ts
+placements: [{ channelId: 1, page: "pages/home", region: "", status: "active" }]
+```
+
+Important details:
+
+- placement updates are opt-in during publish
+- publish defaults to leaving existing placements alone
+- pass `--update-placements` when you want the publish flow to apply manifest placements or placement override flags
+
+## Publishability requirements
+
+For a widget to be publishable, it needs:
+
+- a widget folder under `packages/widgets/src/widgets/<widget-name>`
+- `widget.ts` or `config.json`
+- `template.html`
+- registration in the theme registry if you want it to be selectable through the registered publish flow
+
+## Related pages
+
+- [Creating widgets](/dev/creating-widgets)
+- [Widget manifest and file contract](/dev/widget-files)
+- [Publishing and updating widgets](/dev/publishing-widgets)
+- [Widget CLI reference](/dev/syncing-widgets)

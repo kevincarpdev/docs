@@ -1,112 +1,155 @@
 ---
 title: "Local development setup"
-description: "Get the widget builder and Stencil theme running locally"
+description: "How to configure Bun, env files, theme config, and the Stencil server for this repo"
 ---
 
 ## Prerequisites
 
-- **Node.js** 18 or later
-- **npm** 9.5.1 or later
-- **Git**
-- **Stencil CLI** (`npm install -g @bigcommerce/stencil-cli`)
+- Bun 1.3.x or later
+- Git
+- access to the BigCommerce store credentials used by this storefront
+- access to the Stencil access token used for local theme work
 
-## Clone the repositories
+You do **not** need a separate widget-builder checkout for this repository.
 
-```bash
-git clone <ro-web-bigcommerce-repo-url>
-git clone <widget-builder-repo-url>
-```
+## Install dependencies
 
-Place them as siblings in your workspace:
-
-```
-~/Work/
-├── ro-web-bigcommerce/
-└── widget-builder/
-```
-
-The sync script expects this layout by default.
-
-## Widget Builder setup
-
-### 1. Install dependencies
+From the repo root:
 
 ```bash
-cd widget-builder
-npm install
+bun install
 ```
 
-### 2. Build the CLI
+## Do not run `stencil init`
 
-```bash
-npm run install-cli
-```
+This repo no longer relies on the older interactive `stencil init` flow.
 
-This compiles TypeScript and makes the `widget-builder` command available.
+Instead, place the repo's local config files directly in the storefront and theme directories:
 
-### 3. Create `.env`
-
-Run the interactive setup:
-
-```bash
-widget-builder init
-```
-
-Or create `.env` manually with these values:
-
-```bash
-WIDGET_BUILDER_API_GATEWAY_BASE=https://api.bigcommerce.com/stores/<store-hash>/v3
-WIDGET_BUILDER_AUTH_ID=<api-account-id>
-WIDGET_BUILDER_AUTH_TOKEN=<api-token>
-WIDGET_BUILDER_CHANNEL_ID=1
-```
+- repo root `.env`
+- `apps/storefronts/rustoleum-home/.env`
+- `apps/storefronts/rustoleum-home/stencil-theme/config.stencil.json`
+  or `apps/storefronts/rustoleum-home/stencil-theme/.config.stencil.json`
+- `apps/storefronts/rustoleum-home/stencil-theme/secrets.stencil.json`
 
 <Warning>
-  The `.env` file contains API credentials. Never commit it to version control.
+  Switching environments is not a single flag change. Rotate the env and theme config files together so the
+  store URL, Stencil token, BigCommerce API credentials, channel, and local secrets all point at the same
+  environment.
 </Warning>
 
-### 4. Preview a widget
+## Required local files
+
+### 1. Repo root `.env`
+
+Start from `/.env.example`.
+
+This file is used by Bun-driven tooling and publish commands. Typical values include:
+
+- `BC_STORE_HASH`
+- `BC_ACCESS_TOKEN`
+- `BC_CHANNEL_ID`
+- `VITE_MUI_LICENSE_KEY`
+- local API or SiteVibes fallback values when needed
+
+### 2. Storefront `.env`
+
+Start from `apps/storefronts/rustoleum-home/.env.example`.
+
+This is the storefront-local fallback env surface used for values such as:
+
+- `VITE_APP_SITEVIBES_API`
+- `VITE_APP_SITEVIBES_APP_ID`
+
+### 3. Theme config
+
+Start from `apps/storefronts/rustoleum-home/stencil-theme/config.stencil.example.json`.
+
+Create either:
+
+- `config.stencil.json`, or
+- `.config.stencil.json`
+
+The config file carries the theme-local Stencil settings such as:
+
+- `normalStoreUrl`
+- `port`
+- `packageManager`
+
+### 4. Theme secrets
+
+Start from `apps/storefronts/rustoleum-home/stencil-theme/secrets.stencil.example.json`.
+
+Create:
+
+- `secrets.stencil.json`
+
+This file typically carries theme-local secret values such as:
+
+- `accessToken`
+- `sitevibesApiToken`
+- `sitevibesAppId`
+
+## Fastest setup path
+
+If you want prompts instead of copying files manually, use the repo tooling initializer:
 
 ```bash
-widget-builder start HeroSectionCarousel
+bun packages/tooling/cli.ts init
 ```
 
-Opens `http://localhost:8080` with a live preview of the widget.
+That command writes:
 
-## Stencil theme setup
+- repo root `.env`
+- `apps/storefronts/rustoleum-home/stencil-theme/.config.stencil.json`
+- `apps/storefronts/rustoleum-home/stencil-theme/secrets.stencil.json`
 
-### 1. Install dependencies
+It is a repo-specific setup helper. It is not the same as `stencil init`.
+
+## Start local development
+
+### Preferred entrypoint
 
 ```bash
-cd ro-web-bigcommerce
-npm install
+bun run dev
 ```
 
-### 2. Configure Stencil
+Use this when you are touching anything in:
+
+- `packages/api`
+- `packages/ui`
+- `packages/widgets`
+
+It watches those packages, syncs current `dist` output, and then starts the theme server.
+
+### Theme-only entrypoint
 
 ```bash
-cd stencil-themes/rustoleum-home
-stencil init
+bun run stencil:start
 ```
 
-You will need the **BigCommerce store URL** and a **Stencil CLI token** (generated in the BC admin under API Accounts).
+Use this when package builds are already current and you only need the theme server.
 
-### 3. Start local development
+## Other useful commands
 
 ```bash
-npm run stencil:start
+# full workspace build
+bun run build
+
+# pull the remote stencil theme
+bun run stencil:pull
+
+# run tests
+bun run test
 ```
 
-This starts the Stencil local server with live reload. The webpack build compiles React components and SCSS.
+## Environment rotation checklist
 
-### 4. Build for production
+When you move from one store environment to another, update all of these together:
 
-```bash
-npm run build
-```
+1. repo root `.env`
+2. `apps/storefronts/rustoleum-home/.env`
+3. `config.stencil.json` or `.config.stencil.json`
+4. `secrets.stencil.json`
 
-This runs the production webpack build.
-
-## VS Code workspace
-
-The repo includes a VS Code workspace file at `ro-web-bigcommerce/ro-web-bigcommerce.code-workspace` that includes both the theme and `widget-builder` as workspace folders.
+If those files point at different stores, you can end up publishing widgets to one environment while running the theme against another.

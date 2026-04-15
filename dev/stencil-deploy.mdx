@@ -1,81 +1,95 @@
 ---
 title: "Deployment"
-description: "How to bundle and deploy the Stencil theme to BigCommerce"
+description: "How `bun run stencil:push` bundles, validates, and pushes the Rust-Oleum HOME Stencil theme"
 ---
 
-## Build the theme
+## Primary deployment command
 
-Before deploying, run the production webpack build:
-
-```bash
-cd ro-web-bigcommerce/stencil-themes/rustoleum-home
-npm run build
-```
-
-This compiles all React components, SCSS, and JavaScript into the `assets/dist/` directory.
-
-## Bundle the theme
-
-Create a deployable theme zip file:
+From the repo root:
 
 ```bash
-npm run bundle
+bun run stencil:push
 ```
 
-This runs `stencil bundle`, which:
-1. Validates the theme configuration
-2. Creates a zip archive of all theme files
-3. Strips `.jsx` files from the bundle (they are already compiled by webpack)
+This is the canonical theme deployment entrypoint.
 
-The output is a `.zip` file in the theme directory.
+## What `stencil:push` does
 
-## Push to BigCommerce
+The root script runs:
 
-Deploy the theme directly:
+1. a publish git gate
+2. the theme `push` script in `apps/storefronts/rustoleum-home/stencil-theme`
 
-```bash
-npm run push
+The theme `push` script then runs:
+
+1. `bundle`
+2. `bundle:validate`
+3. `bundle:push`
+
+## Bundle flow
+
+The theme bundle pipeline is:
+
+```mermaid
+flowchart LR
+    build["workspace build"] --> bundle["bundle-theme.mjs"]
+    bundle --> validate["validate-theme-bundle.mjs"]
+    validate --> push["push-theme-bundle.mjs"]
+    push --> bc["BigCommerce theme upload + activate"]
 ```
 
-This runs `stencil bundle` followed by `stencil push`, which uploads the theme to BigCommerce.
+## Related root scripts
 
-You will be prompted to select which variation to apply. For the Rust-Oleum HOME storefront, apply to the active storefront channel.
+| Command | Purpose |
+| --- | --- |
+| `bun run stencil:bundle` | build a theme bundle without pushing |
+| `bun run stencil:pull` | pull the remote theme |
+| `bun run stencil:push` | build, validate, and push the theme |
+| `bun run stencil:release` | run the theme release flow |
 
-## Activate the theme
+## Git gate requirements
 
-After pushing, the theme appears in **BigCommerce Admin > Storefront > Themes**. If the push does not automatically activate it:
+`bun run stencil:push` is protected by a publish git gate.
 
-1. Go to [store-t5arr0qby1.mybigcommerce.com/manage/themes](https://store-t5arr0qby1.mybigcommerce.com/manage/themes)
-2. Find the newly uploaded theme
-3. Click **Apply**
+Before it will run, the repo must be:
 
-## Deployment checklist
+- on `main`
+- clean with no local changes
+- in sync with `origin/main`
 
-<Steps>
-  <Step title="Build locally">
-    Run `npm run build` and verify no webpack errors.
-  </Step>
-  <Step title="Test locally">
-    Run `stencil start` and verify pages render correctly.
-  </Step>
-  <Step title="Bundle">
-    Run `npm run bundle` and confirm the zip is created.
-  </Step>
-  <Step title="Push">
-    Run `npm run push` and confirm upload succeeds.
-  </Step>
-  <Step title="Verify live">
-    Check the live storefront to confirm changes are visible.
-  </Step>
-</Steps>
+If the repo is ahead, behind, or dirty, the command fails fast.
 
-## Widget deployment vs. theme deployment
+<Warning>
+  Theme push is intentionally stricter than normal local development. Plan your release flow so the repo is clean and synchronized before pushing.
+</Warning>
 
-These are **independent** processes:
+## Theme upload limit behavior
 
-| What | How | When |
-|------|-----|------|
-| **Widget templates** | `widget-builder publish` via the Widgets API | Whenever widget HTML/schema changes |
-| **React components** | `stencil push` via theme deployment | Whenever component JS/SCSS changes |
+The push script can recover from the BigCommerce private theme upload limit:
 
-If you change a widget's **template** (the Handlebars HTML), publish it via widget-builder. If you change the **React component** that renders it, deploy the Stencil theme. Often, both are needed.
+- in interactive mode, it lets you choose inactive private themes to delete
+- in non-interactive mode, it auto-selects older inactive private themes for cleanup
+
+After cleanup, it retries the push.
+
+## When to push the theme
+
+Run `bun run stencil:push` when you change any of these:
+
+- theme templates
+- widget registry wiring
+- theme wrappers
+- SCSS
+- bundled JavaScript
+- package widget runtime code used by the theme
+
+## Widget publish vs theme push
+
+These are different operations:
+
+| Operation | Updates |
+| --- | --- |
+| `bun run widgets:publish` | widget templates, widgets, and optional placements |
+| `bun run stencil:push` | the Stencil theme bundle |
+
+If you change both the Page Builder contract and the storefront runtime, you usually need both.

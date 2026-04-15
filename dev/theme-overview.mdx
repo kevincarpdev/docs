@@ -1,81 +1,133 @@
 ---
-title: "Stencil theme structure"
-description: "How the Rust-Oleum HOME Stencil theme is organized"
+title: "Repo organization"
+description: "What belongs in each package, what lives in the theme, and where to place new work"
 ---
 
-## Base theme
+## Top-level layout
 
-The storefront is built on **Cornerstone 6.16.2**, BigCommerce's default Stencil theme, with extensive customization.
-
-## Directory layout
-
-```
-ro-web-bigcommerce/
-├── stencil-themes/
-│   └── rustoleum-home/              # The active Stencil theme
-│       ├── assets/
-│       │   ├── js/
-│       │   │   ├── app.js              # Webpack entry — bootstraps React + widgets
-│       │   │   ├── widgets-loader.js   # Widget registry and hydration
-│       │   │   ├── components/         # React components (JSX)
-│       │   │   ├── themes/             # MUI theme (rustoleumHomeTheme.js)
-│       │   │   ├── utils/              # Shared utilities
-│       │   │   └── theme/              # Stencil page managers (legacy JS)
-│       │   └── scss/
-│       │       ├── theme.scss          # Global SCSS entry point
-│       │       ├── layouts/            # Page-specific layouts
-│       │       └── components/         # Component-level SCSS
-│       ├── templates/
-│       │   ├── pages/                  # Top-level page templates
-│       │   │   ├── product.html        # PDP page
-│       │   │   ├── category.html       # Category listing page
-│       │   │   └── ...
-│       │   ├── components/             # Reusable partials
-│       │   │   └── products/
-│       │   │       ├── product-view.html   # Main PDP partial
-│       │   │       └── ...
-│       │   └── layout/
-│       │       └── base.html           # Base layout wrapper
-│       ├── custom-widgets-backup/      # Synced widget files (not deployed)
-│       ├── config.json                 # Theme settings
-│       ├── schema.json                 # Theme Editor schema
-│       ├── webpack.common.js           # Webpack shared config
-│       └── package.json                # Theme dependencies and scripts
-└── packages/                           # Shared workspace packages
+```text
+.
+├── packages/
+│   ├── api/
+│   ├── tooling/
+│   ├── ui/
+│   └── widgets/
+├── apps/
+│   └── storefronts/
+│       └── rustoleum-home/
+│           ├── .env
+│           └── stencil-theme/
+└── mintlify-docs/
+    ├── content/
+    └── dev/
 ```
 
-## Build system
+## Package boundaries
 
-The theme uses **Webpack** for JavaScript bundling. The entry point is `assets/js/app.js`, which imports React components, widget loaders, and page-specific logic.
+### `packages/api`
 
-### Build commands
+Put shared API utilities and API-oriented code here.
 
-| Command | Description |
-|---------|-------------|
-| `npm run build` | Production webpack build |
-| `npm run buildDev` | Development webpack build (with source maps) |
-| `npm run bundle` | `stencil bundle` — creates a deployable theme zip |
-| `npm run push` | Bundle + `stencil push` — deploys to BigCommerce |
+Use this package when the behavior is not theme-specific and should be shared by widgets, wrappers, or other React surfaces.
 
-### How app.js bootstraps
+### `packages/ui`
 
-1. Detects the current page type (`product`, `category`, etc.)
-2. For PDP pages: fetches product metafields and channel metafields via GraphQL
-3. Mounts `ProductView` React component into `#react-product-view`
-4. Calls `initAllReactWidgets()` to hydrate any Page Builder widgets on the page
+Put reusable React UI here:
 
-## Handlebars templating
+- shared components
+- shared composites
+- icon exports
+- theme tokens
+- typography helpers
 
-Templates use BigCommerce's Handlebars v4 engine with custom helpers:
+Use this package before creating one-off widget-local primitives.
 
-- `{{json product}}` — Serializes data as JSON for React to consume
-- `{{getImageSrcset this ...}}` — Generates responsive image srcsets
-- `{{lang 'key'}}` — Localized string lookup
-- `{{#each}}`, `{{#if}}`, `{{#unless}}` — Standard Handlebars control flow
-- `{{inject 'key' value}}` — Makes data available to JavaScript via `jsContext`
+### `packages/widgets`
 
-## Theme configuration
+This is the source of truth for package-backed Page Builder widgets.
 
-`config.json` holds theme settings (product counts, image sizes, feature flags). `schema.json` defines the Theme Editor UI for store owners to customize these settings.
+Each widget folder lives under:
 
-These are standard Cornerstone configs and rarely need modification for content changes.
+```text
+packages/widgets/src/widgets/<widget-name>/
+```
+
+Typical contents:
+
+- `widget.ts`
+- `template.html`
+- widget-local `.tsx` and `.styles.tsx` files
+- optional widget-local `README.md`
+
+### `packages/tooling`
+
+This package owns the repo CLI for:
+
+- init
+- widget create
+- widget publish
+- widget validate
+- widget delete
+- invalid placement recovery
+
+If the task is about BigCommerce Widgets API operations or placement cleanup, it belongs here.
+
+## Storefront surfaces
+
+### `apps/storefronts/rustoleum-home`
+
+This folder holds storefront-local env and the active Stencil theme package.
+
+### `apps/storefronts/rustoleum-home/stencil-theme`
+
+This is where theme-specific work belongs:
+
+- Handlebars templates
+- theme-local wrappers
+- widget registry wiring
+- SCSS
+- page-manager code
+- bundle, validate, and push scripts
+
+## What belongs where
+
+| Task | Put it here |
+| --- | --- |
+| shared button, input, dialog, token, or icon work | `packages/ui` |
+| shared widget implementation and Page Builder schema | `packages/widgets` |
+| BigCommerce widget publish or placement logic | `packages/tooling` |
+| widget registry wiring | `apps/storefronts/rustoleum-home/stencil-theme/assets/js/framework/widgets/registry.js` |
+| storefront-specific data shaping or runtime wrappers | `apps/storefronts/rustoleum-home/stencil-theme/assets/js/components/widget-wrappers` |
+| Handlebars page templates and theme layout changes | `apps/storefronts/rustoleum-home/stencil-theme/templates` |
+| developer docs | `mintlify-docs/dev` |
+| content-team docs | `mintlify-docs/content` |
+
+## Widget-specific placement rules
+
+For a new or updated widget, expect to touch these surfaces together:
+
+1. `packages/widgets/src/widgets/<widget-name>/...`
+2. `packages/widgets/src/index.ts`
+3. `packages/widgets/package.json`
+4. `apps/storefronts/rustoleum-home/stencil-theme/assets/js/framework/widgets/registry.js`
+5. optional theme wrapper files when the widget needs storefront-specific data
+
+## Theme runtime structure
+
+| Path | Role |
+| --- | --- |
+| `assets/js/framework/widgets/registry.js` | widget type to runtime loader map |
+| `assets/js/framework/widgets/runtime.js` | widget mount runtime |
+| `assets/js/components/widget-wrappers` | storefront-aware wrapper components |
+| `templates/` | Handlebars and Stencil templates |
+| `scripts/start-theme.mjs` | local theme start orchestration |
+| `scripts/bundle-theme.mjs` | bundle generation |
+| `scripts/validate-theme-bundle.mjs` | bundle safety checks |
+| `scripts/push-theme-bundle.mjs` | push and activation flow |
+
+## Rules that keep the repo understandable
+
+- Put shared behavior in packages first.
+- Keep `template.html` focused on the Stencil-to-React handoff, not full visual logic.
+- Use theme wrappers only when the widget needs storefront runtime data or theme-local orchestration.
+- Keep developer docs in `mintlify-docs/dev` self-contained instead of relying on local-only repo files.

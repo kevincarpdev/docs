@@ -1,113 +1,63 @@
 ---
-title: "Styles and theming"
-description: "How to make style changes using SCSS, MUI styled components, and the theme system"
+title: "Styling and tokens"
+description: "How styling is split between shared MUI tokens, shared UI components, and theme-local SCSS"
 ---
 
-## Two style systems
+## Two styling layers
 
-The Rust-Oleum HOME storefront uses two parallel styling systems:
+The storefront uses two main styling surfaces:
 
-| System | Used for | Location |
-|--------|----------|----------|
-| **SCSS** | Global styles, legacy Stencil templates, Page Builder regions, typography | `assets/scss/` |
-| **MUI styled components** | React PDP components, interactive widgets | `assets/js/components/`, `assets/js/themes/` |
+| Surface | Use for |
+| --- | --- |
+| `packages/ui` theme + MUI `styled()` | shared React UI and package widgets |
+| theme-local SCSS in `stencil-theme/assets/scss` | Stencil templates, legacy surfaces, and theme-level layout styling |
 
-## SCSS
+## Shared theme source
 
-### Entry point
+The shared theme is assembled in:
 
-`assets/scss/theme.scss` is the global SCSS entry. It imports:
+- `packages/ui/src/theme/theme.ts`
+- `packages/ui/src/theme/tokens.ts`
 
-1. **Citadel toolkit** — BigCommerce's base SCSS framework
-2. **Component styles** — Individual component stylesheets
-3. **Layout styles** — Page-specific layouts
-4. **Custom overrides** — Rust-Oleum HOME customizations
+These files define:
 
-### Key SCSS files
+- semantic colors
+- typography presets and scales
+- spacing rhythm
+- radius
+- viewport behavior
 
-| File | Purpose |
-|------|---------|
-| `assets/scss/theme.scss` | Main entry, imports everything |
-| `assets/scss/layouts/products/_productView.scss` | PDP layout, breadcrumbs, `.pdp-page` styles |
-| `assets/scss/components/` | Component-level styles |
+## Styling rules for React work
 
-### Making SCSS changes
+- Use `styled()` and theme tokens for durable React styling.
+- Prefer existing shared components from `packages/ui` before building new widget-local primitives.
+- Use semantic color and typography tokens before introducing custom constants.
+- Keep responsive behavior aligned to the repo viewport helpers instead of ad hoc breakpoints.
 
-1. Edit the appropriate SCSS file
-2. Run `npm run buildDev` to compile
-3. Preview locally with `stencil start`
+## Styling rules for theme work
 
-## MUI theme
+Use theme SCSS when the surface is primarily Stencil-template-driven:
 
-React components use Material UI's `styled()` API with a custom theme defined in `assets/js/themes/rustoleumHomeTheme.js`.
+- global layout adjustments
+- theme shell styles
+- legacy template styling
+- non-React storefront surfaces
 
-### Theme tokens
+Do not create a second custom theme object for React components. Use the shared `packages/ui` theme tokens instead.
 
-The theme provides centralized tokens that all React components should use:
+## Common files
 
-```js
-export const colors = {
-  content: {
-    primary: '...',
-    secondary: '...',
-    tertiary: '...',
-  },
-  surface: {
-    1: '...',
-    2: '...',
-  },
-  // ...
-};
+| Path | Role |
+| --- | --- |
+| `packages/ui/src/theme/theme.ts` | MUI theme assembly |
+| `packages/ui/src/theme/tokens.ts` | token definitions |
+| `apps/storefronts/rustoleum-home/stencil-theme/assets/scss` | theme-local SCSS |
+| `packages/widgets/src/widgets/*/*.styles.tsx` | widget-local styled components |
 
-export const transitions = {
-  fast: '...',
-  medium: '...',
-};
+## Good defaults
 
-export const layoutConstants = {
-  componentWidths: {
-    contentMaxWidth: '...',
-  },
-};
-```
-
-### Style rules
-
-<Warning>
-  These rules must be followed for all React component styling.
-</Warning>
-
-| Rule | Do | Don't |
-|------|-----|-------|
-| **Colors** | `colors.content.primary` | `'#333'` or `'black'` |
-| **Spacing** | `theme.spacing(4)` | `'16px'` or `16` |
-| **Font sizes** | `theme.typography.fontSizes.*` | `'14px'` |
-| **Component styling** | `styled(Box)(...)` | `sx={{ ... }}` |
-| **Inline styles** | `styled()` component | `style={{ color: 'red' }}` |
-
-### Example: creating a styled component
-
-```jsx
-import { Box, styled } from '@mui/material';
-import { colors, transitions } from '../themes/rustoleumHomeTheme';
-
-const CardWrapper = styled(Box)(({ theme }) => ({
-  backgroundColor: colors.surface[1],
-  borderRadius: theme.spacing(2),
-  padding: theme.spacing(4),
-  transition: transitions.fast,
-  [theme.breakpoints.down('md')]: {
-    padding: theme.spacing(2),
-  },
-}));
-```
-
-### Icons
-
-Use `@phosphor-icons/react` exclusively for React component icons. Do not use custom SVGs or other icon libraries.
-
-```jsx
-import { ShieldCheck } from '@phosphor-icons/react';
-
-<ShieldCheck size={24} weight="regular" />
-```
+- color from `semanticColors`
+- typography from `typographyPresets` and scale helpers
+- radius from `radius`
+- icon usage from `@thesparklaboratory/rusto-ui/Icon`
+- layout spacing from token-aware theme values

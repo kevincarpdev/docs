@@ -27,7 +27,7 @@ flowchart LR
 
 [PaintCare](https://www.paintcare.org/) is an environmental stewardship program that charges a recycling fee on qualifying paint products sold in participating states. A **Cloudflare Worker** calculates and applies this fee as a custom checkout fee in BigCommerce.
 
-**Source code:** `stencil-themes/rustoleum-home/cloudflare-worker/paintcare-fee-worker.js`
+**Source code:** `apps/storefronts/rustoleum-home/stencil-theme/cloudflare-worker/paintcare-fee-worker.js`
 
 **Worker URL:** `https://paintcare-fee-worker.submit-f65.workers.dev`
 
@@ -192,7 +192,7 @@ Two product metafields (namespace `ct_metafields`) are used to display PaintCare
 
 ### Deployment
 
-The worker lives in `stencil-themes/rustoleum-home/cloudflare-worker/` with three files:
+The worker lives in `apps/storefronts/rustoleum-home/stencil-theme/cloudflare-worker/` with three files:
 
 | File | Purpose |
 |------|---------|
@@ -204,7 +204,7 @@ The worker lives in `stencil-themes/rustoleum-home/cloudflare-worker/` with thre
   <Step title="Install Wrangler">
 
 ```bash
-npm install -g wrangler
+bun add -g wrangler
 wrangler login
 ```
 
@@ -212,10 +212,10 @@ wrangler login
   <Step title="Set secrets">
 
 ```bash
-cd stencil-themes/rustoleum-home/cloudflare-worker
-npx wrangler secret put BC_STORE_HASH
-npx wrangler secret put BC_ACCESS_TOKEN
-npx wrangler secret put PAINTCARE_FEE_SOURCE_URL
+cd apps/storefronts/rustoleum-home/stencil-theme/cloudflare-worker
+wrangler secret put BC_STORE_HASH
+wrangler secret put BC_ACCESS_TOKEN
+wrangler secret put PAINTCARE_FEE_SOURCE_URL
 ```
 
 The `BC_ACCESS_TOKEN` needs the **Checkout modify** scope (and **Marketing read-only** for the `/api/promotions` endpoint).
@@ -224,7 +224,7 @@ The `BC_ACCESS_TOKEN` needs the **Checkout modify** scope (and **Marketing read-
   <Step title="Deploy the worker">
 
 ```bash
-npx wrangler deploy
+wrangler deploy
 ```
 
   </Step>

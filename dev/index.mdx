@@ -1,63 +1,90 @@
 ---
-title: "Developer getting started"
-description: "Tech stack overview, key repos, and important links for Rust-Oleum HOME development"
+title: "Developer guide"
+description: "Current architecture, setup, widget workflow, and deployment guidance for the Rust-Oleum HOME repo"
 ---
 
-## Tech stack
+## What this repo is
 
-The Rust-Oleum HOME storefront is built on:
+This repository is the Rust-Oleum HOME storefront monorepo. It contains:
 
-| Layer | Technology | Version |
-|-------|-----------|---------|
-| **Ecommerce platform** | BigCommerce | Enterprise |
-| **Theme framework** | Stencil (Cornerstone) | 6.16.2 |
-| **Templating** | Handlebars v4 | — |
-| **CSS** | SCSS (Citadel toolkit) | — |
-| **Frontend framework** | React + MUI | React 18, MUI 5 |
-| **Widget system** | BigCommerce Widget Builder CLI | Custom fork |
-| **Build tool** | Webpack | — |
-| **Icons** | Phosphor Icons | 2.0.3 |
+- the shared API, UI, widget, and tooling packages
+- the `rustoleum-home` BigCommerce Stencil theme
+- the Mintlify docs site for developers and content teams
 
-## Repositories
+It does **not** use the older split workflow of a separate widget-builder repo plus a separate theme repo.
 
-| Repo | Purpose |
-|------|---------|
-| `ro-web-bigcommerce` | Stencil theme, React components, SCSS, Handlebars templates, widget hydration |
-| `widget-builder` | Widget Builder CLI for creating, previewing, and publishing Page Builder widgets |
-| `docs` | This documentation site (Mintlify) |
+<Warning>
+  Older notes that mention `npm`, a separate `widget-builder` repository, `meta.json`, sync scripts, or
+  `stencil init` are out of date for this repo.
+</Warning>
 
-## Key URLs
+## Current stack
 
-| Resource | URL |
-|----------|-----|
-| **Live storefront** | [rustoleumhome.com](https://rustoleumhome.com) |
-| **BigCommerce admin** | [store-t5arr0qby1.mybigcommerce.com/manage/dashboard](https://store-t5arr0qby1.mybigcommerce.com/manage/dashboard) |
-| **Page Builder** | [store-t5arr0qby1.mybigcommerce.com/manage/page-builder/?channelId=1](https://store-t5arr0qby1.mybigcommerce.com/manage/page-builder/?channelId=1) |
-| **Products admin** | [store-t5arr0qby1.mybigcommerce.com/manage/products](https://store-t5arr0qby1.mybigcommerce.com/manage/products) |
-| **This docs site** | [sparklabsprojects.mintlify.app](https://sparklabsprojects.mintlify.app) |
-| **Mintlify dashboard** | [dashboard.mintlify.com](https://dashboard.mintlify.com) |
+| Area | Current surface |
+| --- | --- |
+| Package manager | `bun` |
+| Language | TypeScript |
+| Commerce platform | BigCommerce |
+| Theme runtime | Stencil theme under `apps/storefronts/rustoleum-home/stencil-theme` |
+| Shared UI | React 19 + MUI 7 in `packages/ui` |
+| Shared widgets | `packages/widgets` |
+| Publish and placement tooling | `packages/tooling` |
+| Documentation | Mintlify under `mintlify-docs` |
 
-## Docs site domain
+## Monorepo layout
 
-The documentation site is hosted on Mintlify at `sparklabsprojects.mintlify.app`. The `.mintlify.app` subdomain slug is set at project creation time and **cannot be changed** through the dashboard.
+| Path | Responsibility |
+| --- | --- |
+| `packages/api` | Shared API utilities and API-facing code |
+| `packages/ui` | Shared React primitives, composites, icons, and theme tokens |
+| `packages/widgets` | Package-backed Page Builder widgets, manifests, templates, and widget-local components |
+| `packages/tooling` | Widget and placement CLI, publish flow, init flow, recovery commands |
+| `apps/storefronts/rustoleum-home` | Storefront-local env files and the active Stencil theme |
+| `apps/storefronts/rustoleum-home/stencil-theme` | Theme runtime, registry, wrappers, Handlebars templates, bundle and push scripts |
+| `mintlify-docs/dev` | Developer documentation |
+| `mintlify-docs/content` | End-user and content-team documentation |
 
-To get a `rustoleumhome` subdomain, either:
-
-1. **Contact Mintlify support** at [hi@mintlify.com](mailto:hi@mintlify.com) to rename the slug
-2. **Create a new project** in the Mintlify dashboard with slug `rustoleumhome` pointing at the same GitHub repo
-3. **Set up a custom domain** (e.g., `docs.rustoleumhome.com`) in the Mintlify dashboard under **Settings > Domain setup**, then configure a DNS CNAME record
-
-<Frame caption="The Mintlify dashboard only shows custom domain setup, not subdomain renaming.">
-  <img src="/images/mintlify-domain-setup.png" alt="Mintlify domain setup page" />
-</Frame>
-
-## Next steps
+## Start here
 
 <Columns cols={2}>
   <Card title="Architecture" icon="sitemap" href="/dev/architecture">
-    Understand how the pieces connect.
+    Understand how the packages, theme, registry, and publish flow fit together.
   </Card>
   <Card title="Local setup" icon="terminal" href="/dev/local-setup">
-    Get your development environment running.
+    Set up Bun, local env files, theme config, and the Stencil server.
+  </Card>
+  <Card title="Repo organization" icon="folder-tree" href="/dev/theme-overview">
+    See what belongs in each package and where new code should go.
+  </Card>
+  <Card title="Widget system" icon="blocks" href="/dev/widget-overview">
+    Learn the package-widget contract, registry model, and publish boundaries.
   </Card>
 </Columns>
+
+## Common commands
+
+```bash
+# install workspace dependencies
+bun install
+
+# run workspace package watchers + stencil theme
+bun run dev
+
+# full workspace build
+bun run build
+
+# primary widget publish flow
+bun run widgets:publish
+
+# push the stencil theme bundle
+bun run stencil:push
+```
+
+## Recommended reading order
+
+1. [Local setup](/dev/local-setup)
+2. [Repo organization](/dev/theme-overview)
+3. [Widget system overview](/dev/widget-overview)
+4. [Creating widgets](/dev/creating-widgets)
+5. [Publishing and updating widgets](/dev/publishing-widgets)
+6. [Deployment](/dev/stencil-deploy)

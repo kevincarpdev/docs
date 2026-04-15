@@ -1,113 +1,197 @@
 ---
-title: "Syncing widgets"
-description: "How to keep widget files synchronized between the widget-builder and Stencil theme repos"
+title: "Widget CLI reference"
+description: "Current `packages/tooling` CLI commands, arguments, and common recipes for widgets and placements"
 ---
 
-## Why sync?
+## Command entrypoints
 
-Widget source files live in two places:
-
-1. **`widget-builder/`** — The development and publishing source of truth
-2. **`ro-web-bigcommerce/.../custom-widgets-backup/`** — A version-controlled backup in the Stencil theme repo
-
-The sync script keeps these in sync so that both repos have the latest widget files committed.
-
-<Note>
-  The `custom-widgets-backup/` directory is listed in `.stencilignore`. It is **not** included in the Stencil theme bundle that gets pushed to BigCommerce. It exists purely for version control and reference.
-</Note>
-
-## Sync commands
-
-All commands are run from the `widget-builder/` directory (or the matching script in the Stencil theme directory).
-
-### Copy a widget to the Stencil theme
+You can run the CLI directly:
 
 ```bash
-./sync-widgets.sh to-stencil <widget-name>
+bun packages/tooling/cli.ts <command>
 ```
 
-Copies `widget.html`, `config.json`, `schema.json`, `meta.json`, and `widget.yml` (if present) from `widget-builder/<widget-name>/` to the Stencil backup directory.
-
-### Copy a widget from the Stencil theme
+Or use script aliases where they exist:
 
 ```bash
-./sync-widgets.sh from-stencil <widget-name>
+bun run widgets:publish
+bun run stencil:push
 ```
 
-Reverse direction — copies from the Stencil backup into widget-builder.
+## Top-level commands
 
-### Sync all widgets
+| Command | Purpose |
+| --- | --- |
+| `init` | write local env and theme config files |
+| `widget create` | scaffold a new widget folder |
+| `widget publish` | publish widgets with optional build and placement handling |
+| `widget validate` | validate widget schema, translation coverage, and parity |
+| `widget delete` | delete published widgets or widget templates |
+| `widget resolve-invalid-placements` | clean up stale widget/template/placement relationships |
+| `placement delete` | remove placements from a page |
+| `placement fix-invalid-array-placements` | normalize invalid array-shaped placement config payloads |
+
+## `init`
 
 ```bash
-./sync-widgets.sh sync-all
+bun packages/tooling/cli.ts init
 ```
 
-Copies every widget folder that contains a `widget.html` from widget-builder to the Stencil theme.
+Writes:
 
-### List available widgets
+- repo root `.env`
+- `apps/storefronts/rustoleum-home/stencil-theme/.config.stencil.json`
+- `apps/storefronts/rustoleum-home/stencil-theme/secrets.stencil.json`
+
+## `widget create`
 
 ```bash
-./sync-widgets.sh list
+bun packages/tooling/cli.ts widget create <widget-name> [--debug]
 ```
 
-Shows all widget directories in both widget-builder and the Stencil theme.
+Arguments:
 
-## Default paths
+- `<widget-name>`: kebab-case folder name
 
-The sync script auto-detects paths based on the repository layout:
+Options:
 
-| Variable | Default value |
-|----------|--------------|
-| Widget Builder dir | The script's own directory |
-| Stencil widgets dir | `../ro-web-bigcommerce/stencil-themes/rustoleum-home/custom-widgets-backup/custom-widgets` |
+- `--debug`
 
-Override with environment variables:
+## `widget publish`
 
 ```bash
-WIDGET_BUILDER_PATH=/custom/path ./sync-widgets.sh to-stencil MyWidget
-STENCIL_WIDGETS_PATH=/custom/path ./sync-widgets.sh to-stencil MyWidget
+bun packages/tooling/cli.ts widget publish [options]
 ```
 
-## Complete workflow
+Options:
 
-```mermaid
-flowchart LR
-    A["Edit widget in widget-builder"] --> B["Publish to BigCommerce"]
-    B --> C["Sync to Stencil theme"]
-    C --> D["Commit to both repos"]
-```
+| Option | Meaning |
+| --- | --- |
+| `--build` | force `bun run build` before publish |
+| `--channel-id <id>` | override publish channel |
+| `--debug` | print raw trace details |
+| `--dry-run` | validate inputs and show intended actions only |
+| `--entity-id <id>` | placement entity target |
+| `--list-only` | show inventory only |
+| `--non-interactive` | disable prompts |
+| `--region <name>` | placement region override |
+| `--registry-file <path>` | explicit registry override |
+| `--skip` | skip placement handling |
+| `--sort-order <n>` | placement sort order override |
+| `--stencil-publish` | run `bun run stencil:push` after publish |
+| `--storefront <slug>` | storefront slug under `apps/storefronts` |
+| `--template-file <path>` | placement template override |
+| `--template-version-mode` | template update mode: `create-new-version` or `in-place` |
+| `--update-placements` | opt in to placement updates |
+| `--upgrade-template` | upgrade widgets to latest template version |
+| `--widgets <comma-separated>` | publish subset |
+| `-y, --yes` | skip confirmation prompt |
 
-### Step by step
+## `widget validate`
 
 ```bash
-# 1. Develop the widget
-cd widget-builder
-widget-builder start MyWidget
-
-# 2. Publish to BigCommerce
-widget-builder publish MyWidget
-
-# 3. Sync to Stencil theme
-./sync-widgets.sh to-stencil MyWidget
-
-# 4. Commit changes in widget-builder
-git add MyWidget/
-git commit -m "Update MyWidget widget"
-
-# 5. Commit changes in Stencil theme
-cd ../ro-web-bigcommerce
-git add stencil-themes/rustoleum-home/custom-widgets-backup/custom-widgets/MyWidget/
-git commit -m "Sync MyWidget widget from widget-builder"
+bun packages/tooling/cli.ts widget validate [widget-name] [options]
 ```
 
-## Files copied during sync
+Options:
 
-| File | Synced |
-|------|--------|
-| `widget.html` | Yes |
-| `config.json` | Yes |
-| `schema.json` | Yes |
-| `meta.json` | Yes (if present) |
-| `widget.yml` | Yes (if present) |
-| `query.graphql` | No |
-| `queryParams.json` | No |
+- `--bypass-translation-gate`
+- `--debug`
+
+## `widget delete`
+
+```bash
+bun packages/tooling/cli.ts widget delete [options]
+```
+
+Options:
+
+| Option | Meaning |
+| --- | --- |
+| `--channel-id <id>` | channel override |
+| `--debug` | raw delete trace |
+| `--non-interactive` | disable prompts |
+| `--template` | delete widget templates grouped by widget name |
+| `--widgets <names-or-uuids>` | explicit selection |
+| `-y, --yes` | skip confirmation |
+
+## `widget resolve-invalid-placements`
+
+```bash
+bun packages/tooling/cli.ts widget resolve-invalid-placements [options]
+```
+
+Options:
+
+- `--channel-id <id>`
+- `--debug`
+
+Use this when published widget/template relationships are stale and Page Builder data needs recovery.
+
+## `placement delete`
+
+```bash
+bun packages/tooling/cli.ts placement delete [options]
+```
+
+Options:
+
+| Option | Meaning |
+| --- | --- |
+| `--all` | delete every placement on the selected page |
+| `--channel-id <id>` | channel override |
+| `--debug` | raw trace |
+| `--non-interactive` | disable prompts |
+| `--page <template>` | page template, such as `pages/home` |
+| `--widgets <comma-separated>` | delete placements only for selected widgets |
+| `-y, --yes` | skip confirmation |
+
+## `placement fix-invalid-array-placements`
+
+```bash
+bun packages/tooling/cli.ts placement fix-invalid-array-placements [options]
+```
+
+Options:
+
+- `--channel-id <id>`
+- `--debug`
+- `--widget <name-or-uuid>`
+
+## Practical recipes
+
+### List publishable widgets only
+
+```bash
+bun packages/tooling/cli.ts widget publish --list-only --storefront rustoleum-home
+```
+
+### Publish a subset in CI-safe mode
+
+```bash
+CI=true bun packages/tooling/cli.ts widget publish \
+  --storefront rustoleum-home \
+  --widgets categories,gallery \
+  --non-interactive \
+  --yes
+```
+
+### Delete all placements on a page
+
+```bash
+CI=true bun packages/tooling/cli.ts placement delete \
+  --page pages/home \
+  --all \
+  --non-interactive \
+  --yes
+```
+
+### Delete only one widget's placements on a page
+
+```bash
+CI=true bun packages/tooling/cli.ts placement delete \
+  --page pages/home \
+  --widgets categories \
+  --non-interactive \
+  --yes
+```

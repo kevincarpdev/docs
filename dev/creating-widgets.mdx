@@ -1,169 +1,136 @@
 ---
 title: "Creating widgets"
-description: "How to create a new Page Builder widget from scratch"
+description: "How to scaffold, wire, and validate a new package-backed Page Builder widget"
 ---
 
-## Create a widget folder
+## Scaffold the widget
 
-Use the CLI to scaffold a new widget:
-
-```bash
-cd widget-builder
-widget-builder create MyNewWidget
-```
-
-This creates:
-
-```
-MyNewWidget/
-├── widget.html      # Handlebars template
-├── schema.json      # Page Builder field definitions
-└── config.json      # Default values for preview
-```
-
-You also need to manually create `meta.json` to control how the widget appears in the Page Builder catalog.
-
-## Widget file anatomy
-
-### widget.html
-
-The Handlebars template that BigCommerce renders. It outputs a `div` with `data-*` attributes that the React component reads:
-
-```html
-<div
-  id="my-widget-{{guid}}"
-  class="ro-my-widget"
-  data-widget-type="mywidget"
-  data-heading="{{heading}}"
-  data-subheading="{{subheading}}"
-  data-image="{{imageUrl}}"
->
-  <!-- Page Builder preview content (hidden on live site) -->
-  <div class="widget-preview">
-    <h2>{{heading}}</h2>
-    <p>{{subheading}}</p>
-  </div>
-</div>
-```
-
-The `{{guid}}` token ensures unique IDs when multiple instances exist on a page.
-
-### schema.json
-
-Defines the editing UI that appears in Page Builder's left sidebar:
-
-```json
-[
-  {
-    "type": "tab",
-    "label": "Content",
-    "sections": [
-      {
-        "label": "Main Settings",
-        "settings": [
-          {
-            "type": "input",
-            "id": "heading",
-            "label": "Heading",
-            "default": "Default Heading"
-          },
-          {
-            "type": "input",
-            "id": "subheading",
-            "label": "Subheading",
-            "default": ""
-          },
-          {
-            "type": "imageManager",
-            "id": "imageUrl",
-            "label": "Image",
-            "default": {
-              "src": ""
-            }
-          }
-        ]
-      }
-    ]
-  }
-]
-```
-
-Common field types:
-
-| Type | Purpose |
-|------|---------|
-| `input` | Single-line text |
-| `text` | Multi-line textarea |
-| `imageManager` | Image upload via BigCommerce Image Manager |
-| `productId` | Product search/picker |
-| `select` | Dropdown menu |
-| `color` | Color picker |
-| `toggle` | Boolean on/off |
-| `number` | Numeric input |
-
-### config.json
-
-Default values used during widget preview. Keys must match the `id` fields in `schema.json`:
-
-```json
-{
-  "heading": "Default Heading",
-  "subheading": "Default subheading text",
-  "imageUrl": ""
-}
-```
-
-### meta.json
-
-Controls how the widget appears in the Page Builder widget catalog:
-
-```json
-{
-  "name": "My New Widget",
-  "icon_name": "grid-four",
-  "description": "A custom widget for the Rust-Oleum HOME storefront",
-  "category": "Rustoleum Home"
-}
-```
-
-Set `category` to `"Rustoleum Home"` so the widget appears grouped with all other custom widgets.
-
-## Phosphor Icons
-
-Widgets use [Phosphor Icons](https://phosphoricons.com) via CDN. The global stylesheet is already loaded on the storefront:
-
-```html
-<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/regular/style.css">
-```
-
-Usage in widget templates:
-
-```html
-<i class="ph ph-shield-check"></i>
-```
-
-Browse the full icon library at [phosphoricons.com](https://phosphoricons.com).
-
-## Live preview
-
-Start the local preview server:
+Use the repo CLI from the repo root:
 
 ```bash
-widget-builder start MyNewWidget
+bun packages/tooling/cli.ts widget create <widget-name>
 ```
 
-This opens `http://localhost:8080` where you can see the widget rendered with its `config.json` defaults and edit schema fields in real time.
+Example:
 
-## Adding the React component
-
-After creating the widget template, you need a corresponding React component in the Stencil theme:
-
-1. Create `ro-web-bigcommerce/stencil-themes/rustoleum-home/assets/js/components/MyNewWidget.jsx`
-2. Register it in `widgets-loader.js`:
-
-```js
-'mywidget': () => import('./components/MyNewWidget.jsx').then(m => m.MyNewWidget || m.default),
-'my-widget': () => import('./components/MyNewWidget.jsx').then(m => m.MyNewWidget || m.default),
+```bash
+bun packages/tooling/cli.ts widget create product-highlights
 ```
 
-Always register both the lowercase and hyphenated versions of the type name.
+The scaffold creates:
+
+```text
+packages/widgets/src/widgets/<widget-name>/
+├── widget.ts
+├── template.html
+├── <ComponentName>.tsx
+└── <ComponentName>.styles.tsx
+```
+
+## What the scaffold does not do
+
+The scaffold creates the folder and starter files only. You still need to:
+
+1. implement the real widget UI
+2. refine the schema in `widget.ts`
+3. update `packages/widgets/src/index.ts`
+4. update `packages/widgets/package.json` exports
+5. add a registry entry in the theme
+6. add a theme wrapper if the widget needs storefront data
+
+## Recommended implementation order
+
+### 1. Finalize `widget.ts`
+
+Define:
+
+- widget `name`
+- `description`
+- `schemaVersion`
+- schema tabs, sections, settings, and translations
+- optional `placements`
+
+### 2. Build `template.html`
+
+Keep the template focused on the handoff to React:
+
+- set `data-widget-type`
+- serialize `data-widget-props`
+- keep `data-widget-anchor` separate when applicable
+
+### 3. Implement the React widget
+
+Use:
+
+- shared UI from `packages/ui` first
+- MUI composition second
+- widget-local styled components only when the surface is widget-specific
+
+### 4. Export the widget package entry
+
+Add the new widget to:
+
+- `packages/widgets/src/index.ts`
+- `packages/widgets/package.json`
+
+Without those exports, the theme registry cannot import the widget by package path.
+
+### 5. Register the widget in the theme
+
+Add an entry to:
+
+```text
+apps/storefronts/rustoleum-home/stencil-theme/assets/js/framework/widgets/registry.js
+```
+
+If the widget is presentational, the registry can load the package widget directly.
+
+If the widget needs storefront data or theme runtime glue, add a wrapper under:
+
+```text
+apps/storefronts/rustoleum-home/stencil-theme/assets/js/components/widget-wrappers/
+```
+
+## Creation checklist
+
+<Steps>
+  <Step title="Scaffold">
+    Run `bun packages/tooling/cli.ts widget create <widget-name>`.
+  </Step>
+  <Step title="Author the manifest">
+    Replace starter schema fields in `widget.ts` with the real Page Builder contract.
+  </Step>
+  <Step title="Build the handoff">
+    Update `template.html` so it emits the correct `data-widget-type` and serialized props.
+  </Step>
+  <Step title="Implement the UI">
+    Build the React component with shared tokens and package UI primitives where possible.
+  </Step>
+  <Step title="Wire exports and registry">
+    Update package exports and add the theme registry entry or wrapper.
+  </Step>
+  <Step title="Validate">
+    Run widget validation, the touched-file Biome commands, and a workspace build if needed.
+  </Step>
+</Steps>
+
+## Validation commands
+
+```bash
+# validate one widget
+bun packages/tooling/cli.ts widget validate <widget-name>
+
+# touched-file lint
+bun run biome lint --fix --max-diagnostics=25 mintlify-docs/dev/creating-widgets.mdx
+
+# touched-file format
+bun run biome format --write mintlify-docs/dev/creating-widgets.mdx
+```
+
+## Practical guidance
+
+- Keep `widget.ts` merchant-focused. Put visual structure in component code, not in schema sprawl.
+- Prefer one top-level authoring array when repeatable content is necessary.
+- Use shared compose helpers from the widget manifest utilities when they fit the contract.
+- Do not create `meta.json` for package widgets.
+- Treat `config.json` as generated compatibility output, not authored source.

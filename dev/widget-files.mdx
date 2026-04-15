@@ -1,174 +1,151 @@
 ---
-title: "Widget file reference"
-description: "Detailed reference for every file in a widget folder"
+title: "Widget manifest and file contract"
+description: "How `widget.ts`, `template.html`, generated artifacts, and shared compose helpers work"
 ---
 
-## File overview
+## Core files
 
-Each widget folder in `widget-builder/` can contain the following files:
+Each package-backed widget folder should be read as a contract, not just a group of files.
 
-| File | Required | Purpose |
-|------|----------|---------|
-| `widget.html` | Yes | Handlebars template rendered by BigCommerce |
-| `schema.json` | Yes | Defines Page Builder editing fields |
-| `config.json` | Yes | Default values for preview |
-| `meta.json` | Recommended | Widget catalog name, icon, and category |
-| `widget.yml` | Auto-generated | Stores the BigCommerce template UUID after first publish |
-| `query.graphql` | Optional | Storefront GraphQL query for fetching product/category data |
-| `queryParams.json` | Optional | Parameters for the GraphQL query |
+| File | Role | Authored or generated |
+| --- | --- | --- |
+| `widget.ts` | source of truth for widget metadata, schema, translations, placements, and migrations | authored |
+| `template.html` | Stencil SSR to React handoff | authored |
+| `schema.json` | checked-in structural parity baseline | generated from `widget.ts` |
+| `config.json` | compatibility artifact for publish and validation flows | generated from `widget.ts` |
+| widget `.tsx` / `.styles.tsx` | runtime UI implementation | authored |
+| widget `README.md` | widget-local implementation notes when needed | authored |
 
-## widget.html
+`meta.json` is not part of the current package-widget contract and should not be authored.
 
-A Handlebars template that BigCommerce's rendering engine processes server-side. The output is static HTML that gets placed on the page.
+## `widget.ts` is the source of truth
 
-**Available variables:**
-- `{{guid}}` — Unique instance identifier
-- `{{setting_id}}` — Any value from `schema.json` settings
-- `{{json _.data.site.products.edges}}` — GraphQL query results (when `query.graphql` is present)
+The shared widget manifest utilities live in:
 
-**Pattern:** Most widgets output a single `div` with all configuration passed via `data-*` attributes, plus a preview block that is hidden on the live storefront:
-
-```html
-<div
-  id="widget-{{guid}}"
-  data-widget-type="mywidget"
-  data-config='{"heading":"{{heading}}","items":{{json items}}}'
->
-  <!-- Preview-only content for Page Builder -->
-  <div class="widget-preview-only">
-    <h2>{{heading}}</h2>
-  </div>
-</div>
+```text
+packages/widgets/src/widgets/shared/widget-manifest.ts
 ```
 
-## schema.json
+The manifest exports the core authoring helpers:
 
-A JSON array of tab objects. Each tab contains sections, and each section contains settings.
+- `defineWidget(...)`
+- `translation(...)`
+- `compose.anchorField(...)`
+- `compose.button(...)`
+- `compose.copy(...)`
+- `compose.discountLabel(...)`
+- `compose.icon(...)`
 
-**Structure:**
+## What `widget.ts` controls
 
-```
-Tab → Section → Setting
-```
+| Concern | Defined in `widget.ts` |
+| --- | --- |
+| widget name and description | yes |
+| schema version | yes |
+| Page Builder tabs, sections, and settings | yes |
+| translation keys and default strings | yes |
+| default placement targets | yes |
+| schema migration hook | yes |
 
-**Full example with multiple field types:**
+## Supported schema surface
 
-```json
-[
-  {
-    "type": "tab",
-    "label": "Content",
-    "sections": [
-      {
-        "label": "Header",
-        "settings": [
-          { "type": "input", "id": "heading", "label": "Heading", "default": "" },
-          { "type": "text", "id": "description", "label": "Description", "default": "" }
-        ]
-      },
-      {
-        "label": "Image",
-        "settings": [
-          { "type": "imageManager", "id": "backgroundImage", "label": "Background Image", "default": { "src": "" } }
-        ]
-      },
-      {
-        "label": "Product",
-        "settings": [
-          { "type": "productId", "id": "featuredProduct", "label": "Featured Product", "default": "" }
-        ]
-      }
-    ]
-  },
-  {
-    "type": "tab",
-    "label": "Design",
-    "sections": [
-      {
-        "label": "Colors",
-        "settings": [
-          { "type": "color", "id": "bgColor", "label": "Background Color", "default": "#FFFFFF" },
-          { "type": "toggle", "id": "showBorder", "label": "Show Border", "default": false }
-        ]
-      }
-    ]
-  }
-]
-```
+The shared manifest layer supports these top-level schema constructs:
 
-## config.json
+- `tab`
+- `array`
+- `hidden`
 
-A flat JSON object where keys match the `id` values from `schema.json`. These values are used during local preview and serve as defaults.
+Important constraints:
 
-```json
-{
-  "heading": "Welcome",
-  "description": "This is the default description",
-  "backgroundImage": "",
-  "featuredProduct": "",
-  "bgColor": "#FFFFFF",
-  "showBorder": false
-}
-```
+- the schema must have an integer `schemaVersion >= 1`
+- the current validation layer expects at most one array authoring surface
+- tab and section labels must remain plain strings for editor compatibility
+- array `entryLabel` values must also remain plain strings
 
-## meta.json
+## Example manifest pattern
 
-Controls the widget's appearance in the Page Builder widget catalog:
+```ts
+import { compose, defineWidget, translation } from "../shared/widget-manifest.js";
 
-```json
-{
-  "name": "My Widget",
-  "icon_name": "grid-four",
-  "description": "Short description shown in the widget picker",
-  "category": "Rustoleum Home"
-}
+export default defineWidget({
+  description: "Example widget",
+  name: "Example",
+  schemaVersion: 1,
+  placements: [{ channelId: 1, page: "pages/home", region: "", status: "active" }],
+  schema: [
+    {
+      type: "tab",
+      label: "Content",
+      sections: [
+        {
+          label: "Content",
+          settings: [
+            {
+              type: "input",
+              id: "heading",
+              label: translation("HeadingLabel", "Heading"),
+              default: "",
+            },
+            ...compose.button(),
+          ],
+        },
+      ],
+    },
+  ],
+});
 ```
 
-The `icon_name` value uses BigCommerce's built-in icon set. Common options: `grid-four`, `layout`, `type`, `image`, `star`.
+## `template.html` responsibilities
 
-## widget.yml
+`template.html` should stay focused on the mount handoff:
 
-Auto-generated on first publish. Contains only the BigCommerce widget template UUID:
+- output one stable container element
+- set `data-widget-type`
+- serialize `data-widget-props`
+- keep anchors in `data-widget-anchor` when needed
 
-```
-a1b2c3d4-e5f6-7890-abcd-ef1234567890
-```
+Do not move the full visual implementation into the template. The template exists to bridge BigCommerce widget rendering into the React runtime.
 
-This file allows subsequent publishes to **update** the existing widget rather than creating a new one. Do not manually edit this file.
+## Placements in the manifest
 
-## query.graphql (optional)
+Placement objects support:
 
-A Storefront GraphQL query that BigCommerce executes server-side before rendering the widget. The results are available in the Handlebars template via `_.data`:
+- `channelId`
+- `entityId`
+- `page`
+- `region`
+- `sortOrder`
+- `status`
 
-```graphql
-query WidgetProducts($productIds: [Int!]) {
-  site {
-    products(entityIds: $productIds) {
-      edges {
-        node {
-          entityId
-          name
-          path
-          defaultImage {
-            url(width: 500)
-            altText
-          }
-          prices {
-            price { value currencyCode }
-          }
-        }
-      }
-    }
-  }
-}
-```
+Those values are only applied during publish when placement updates are explicitly enabled.
 
-## queryParams.json (optional)
+## Generated artifacts
 
-Maps schema field values to GraphQL query variables:
+The tooling layer can load a widget manifest, emit artifacts, and write:
 
-```json
-{
-  "productIds": "{{productId1}},{{productId2}}"
-}
-```
+- `config.json`
+- `schema.json`
+
+That is why `widget.ts` should be treated as the authored source of truth.
+
+## Translation behavior
+
+`translation(...)` emits structured locale payloads into the generated schema translations surface.
+
+Use it for user-facing labels that belong in the Page Builder editor contract.
+
+Keep tab labels, section labels, and array entry labels as plain strings where the editor contract requires literal values.
+
+## Shared compose helpers
+
+The current shared compose helpers cover the most common contract fragments:
+
+| Helper | Typical use |
+| --- | --- |
+| `compose.anchorField()` | optional in-page anchor |
+| `compose.button()` | CTA text, variant, icons, and destinations |
+| `compose.copy()` | heading, subheading, and body group |
+| `compose.discountLabel()` | text/date/type discount label contract |
+| `compose.icon()` | shared icon picker plus custom icon fallback |
+
+Use them when they match the contract. Do not force a helper into a widget that needs a different authoring model.
