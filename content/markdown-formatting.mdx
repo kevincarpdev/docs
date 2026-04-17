@@ -1,0 +1,136 @@
+---
+title: "Markdown formatting"
+description: "How to use markdown syntax in Page Builder widget fields that support it"
+---
+
+Some widget text fields support **markdown** — a simple way to add formatting like bold, lists, and links using plain text symbols. No HTML or special editor required.
+
+<Note>
+  Not every field renders markdown. Only fields marked "supports markdown" in the [Widget Settings Reference](/content/widget-settings) will format the text. In all other fields, the symbols appear as-is. When in doubt, use **Preview mode** after saving to check how the content looks before publishing.
+</Note>
+
+---
+
+## Headings
+
+Use `#` symbols to create headings. More symbols = smaller heading.
+
+```
+## Section heading
+### Sub-section heading
+```
+
+Avoid `#` (H1) in widget fields — that level is reserved for the page title.
+
+---
+
+## Bold and italic
+
+| Format | Syntax | Result |
+|--------|--------|--------|
+| Bold | `**your text**` | **your text** |
+| Italic | `*your text*` | *your text* |
+| Bold + italic | `***your text***` | ***your text*** |
+
+---
+
+## Lists
+
+### Unordered (bullet) list
+
+Start each line with `- ` or `* `:
+
+```
+- Rust-Oleum HOME Floor Coating
+- Foam roller
+- Painter's tape
+```
+
+### Ordered (numbered) list
+
+Start each line with a number followed by `.`:
+
+```
+1. Clean and dry the surface
+2. Apply the first coat
+3. Wait 4 hours
+4. Apply the second coat
+```
+
+---
+
+## Links
+
+```
+[link text](https://example.com)
+```
+
+Example: `[Shop Floor Coatings](https://rustoleumhome.com/floor)` renders as a clickable link.
+
+---
+
+## Blockquotes
+
+Use `>` to create a pull-quote or callout block:
+
+```
+> Apply two coats for a durable, long-lasting finish.
+```
+
+---
+
+## Inline code
+
+Wrap text in backticks to display it as code or a fixed-width label:
+
+```
+Use color code `#5F6D68` for the panel background.
+```
+
+---
+
+## Line breaks and paragraphs
+
+Leave a **blank line** between blocks of text to create a new paragraph:
+
+```
+Apply the first coat and allow to dry completely.
+
+Once dry, lightly sand the surface before applying the second coat.
+```
+
+A single line break (no blank line) will not create a new paragraph in most markdown renderers.
+
+---
+
+## Practical example
+
+Here's a full example of a body copy field using markdown:
+
+```
+Apply **two coats** for best results.
+
+**Drying time:** Allow 4 hours between coats.
+
+What you'll need:
+- Rust-Oleum HOME Floor Coating
+- Foam roller
+- Painter's tape
+
+[View application guide](https://rustoleumhome.com/how-to)
+```
+
+---
+
+## Widgets that support markdown
+
+Fields marked "supports markdown" appear in the [Widget Settings Reference](/content/widget-settings). Common examples include:
+
+| Widget | Field |
+|--------|-------|
+| Image Text | Body |
+| Step Section | Sub-Step Body |
+| Step by Step | Steps (body) |
+| Markdown widget | Markdown Content |
+
+For a full list, refer to the Widget Settings Reference and look for fields with "supports markdown" in the Notes column.

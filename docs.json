@@ -65,7 +65,8 @@
             "pages": [
               "content/index",
               "content/page-builder-basics",
-              "content/editing-widgets"
+              "content/editing-widgets",
+              "content/markdown-formatting"
             ]
           },
           {
